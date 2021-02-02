@@ -121,8 +121,13 @@
               "devServerTarget": "cs476-project:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
-    }},
+    }
+  },
   "defaultProject": "cs476-project"
 }

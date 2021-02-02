@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "cs476-project"
+  },
+  "targets": {
+    "cs476-project": {
+      "hosting": {
+        "cs476-project": [
+          "cs476-project"
+        ]
+      }
+    }
   }
 }
