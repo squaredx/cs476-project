@@ -1,38 +1,38 @@
 <!-- Default form register -->
 <div class="signup">
-  <form class="text-center border border-light p-5">
+  <form [formGroup]="signupForm" class="text-center border border-light p-5">
 
       <p class="h4 mb-4">Sign up</p>
 
       <div class="form-row mb-4">
         <div class="col">
           <!-- First name -->
-          <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" />
+          <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" formControlName="firstName"/>
         </div>
         <div class="col">
           <!-- Last name -->
-          <input type="text" id="defaultRegisterFormLastName" class="form-control" placeholder="Last name" />
+          <input type="text" id="defaultRegisterFormLastName" class="form-control" placeholder="Last name" formControlName="lastName"/>
         </div>
       </div>
 
       <!-- E-mail -->
       <div class="form-group">
-          <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail" />
+          <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail" formControlName="email"/>
       </div>
       
       <!-- Password -->
-      <input type="password" id="defaultRegisterFormPassword" class="form-control mb-4" placeholder="Password" />
+      <input type="password" id="defaultRegisterFormPassword" class="form-control mb-4" placeholder="Password" formControlName="password"/>
       
       <!-- Phone number -->
-      <input type="text" id="defaultRegisterPhonePassword" class="form-control mb-4" placeholder="Phone number (optional)" />
+      <input type="text" id="defaultRegisterPhonePassword" class="form-control mb-4" placeholder="Phone number (optional)" formControlName="phoneNumber"/>
 
       <!-- Company name -->
-      <input type="text" id="defaultRegisterFromCompany" class="form-control mb-4" placeholder="Company name" />
+      <input type="text" id="defaultRegisterFromCompany" class="form-control mb-4" placeholder="Company name" formControlName="companyName"/>
 
-      <textarea type="text" class="form-control mb-4" placeholder="Company description (optional)"></textarea>
+      <textarea type="text" class="form-control mb-4" placeholder="Company description (optional)" formControlName="companyDesc"></textarea>
 
       <!-- Sign up button -->
-      <button mdbBtn color="info" block="true" class="btn-primary" type="submit">Submit</button>
+      <button color="info" block="true" class="btn btn-primary" type="submit" [disabled]="!signupForm.valid">Submit</button>
 
       <hr>
 

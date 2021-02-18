@@ -8,6 +8,14 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
+import {
+  RiBankLine,
+  RemixIconModule,
+} from 'angular-remix-icon';
+
+const icons = {
+  RiBankLine,
+};
 
 
 @NgModule({
@@ -18,7 +26,8 @@ import { environment } from '../environments/environment';
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    RemixIconModule.configure(icons),
   ],
   providers: [],
   bootstrap: [AppComponent]

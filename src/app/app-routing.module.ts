@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { RemixIconModule } from "angular-remix-icon";
-
-import { RiHome3Line } from "angular-remix-icon";
 
 const routes: Routes = [
   { 
