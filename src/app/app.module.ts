@@ -9,12 +9,18 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
 import {
-  RiBankLine,
+  RiHome4Line,
+  RiDashboard2Line,
+  RiFileInfoLine,
+  RiLoginBoxLine,
   RemixIconModule,
 } from 'angular-remix-icon';
 
 const icons = {
-  RiBankLine,
+  RiHome4Line,
+  RiDashboard2Line,
+  RiFileInfoLine,
+  RiLoginBoxLine
 };
 
 

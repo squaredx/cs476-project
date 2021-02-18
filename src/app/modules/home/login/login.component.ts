@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from 'src/app/shared/services/firebase.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-login',
@@ -12,10 +14,16 @@ export class LoginComponent implements OnInit {
   password: string = '';
   returnUrl: string = '';
 
+  loginForm = this.formBuilder.group({
+    email: ['', Validators.email],
+    password: ['', Validators.required]
+  });
+
   constructor(
     private fb: FirebaseService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {

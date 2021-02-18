@@ -12,7 +12,7 @@ export class SignupComponent implements OnInit {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', Validators.email],
-    password: ['', Validators.required],
+    password: ['', Validators.minLength(8)],
     phoneNumber: [''],
     companyName: ['', Validators.required],
     companyDesc: ['']

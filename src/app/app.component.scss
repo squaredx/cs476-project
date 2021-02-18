@@ -18,10 +18,13 @@
     justify-content: space-between;
     font-size: 20px;
     font-family: Comic Sans MS;
+    width: auto;
 }
-
+.icon{
+    padding-top: 3px;
+}
 a {
-    padding-right: 2rem;
+    padding-right: 2.5rem;
     color: black;
     text-decoration: none;
 }
