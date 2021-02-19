@@ -6,17 +6,21 @@
             <rmx-icon class="icon" name="home-4-line"></rmx-icon>
             <span>Home</span>
         </a>
-        <a routerLink="" class="d-flex"> 
-            <rmx-icon class="icon" name="dashboard-2-line"></rmx-icon>
-            <span>Dashboard</span>
-        </a>
         <a routerLink="about-us" class="d-flex">
             <rmx-icon class="icon" name="file-info-line"></rmx-icon>
             <span>About us</span>
         </a>
-        <a routerLink="login" class="d-flex">
+        <a *ngIf="this.firebase.isLoggedIn" routerLink="company/{{this.firebase.user.uid}}" class="d-flex"> 
+            <rmx-icon class="icon" name="dashboard-2-line"></rmx-icon>
+            <span>Dashboard</span>
+        </a>
+        <a *ngIf="!this.firebase.isLoggedIn" routerLink="login" class="d-flex">
             <rmx-icon class="icon" name="login-box-line"></rmx-icon>
             <span>Sign in</span>
+        </a>
+        <a *ngIf="this.firebase.isLoggedIn" routerLink="" (click)="signOut()" class="d-flex">
+            <rmx-icon class="icon" name="login-box-line"></rmx-icon>
+            <span>Sign out</span>
         </a>
     </nav>
 </div>

@@ -10,8 +10,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  username: string = '';
-  password: string = '';
   returnUrl: string = '';
 
   loginForm = this.formBuilder.group({
@@ -29,20 +27,29 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     //TODO: Fix the return URL when logged in
     this.route.queryParams
-      .subscribe (params => this.returnUrl = params['return'] || '/company/PUTIDHERE');
+      .subscribe (params => this.returnUrl = params['return']);
   }
 
-  login() {
+  onSubmit() {
     //do input checking here 
     if(this.username && this.password) {
       this.fb.login(this.username, this.password)
         .then((res) => {
           //success! navigate to the return url
+          this.returnUrl = this.returnUrl ?? `/company/${res.user.uid}`;
           this.router.navigateByUrl(this.returnUrl);
         })
         .catch((err) => {
           console.log(err.message);
         });
     }
+  }
+
+  get username() {
+    return this.loginForm.controls.email.value;
+  }
+
+  get password() {
+    return this.loginForm.controls.password.value;
   }
 }
