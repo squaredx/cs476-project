@@ -1,1 +1,26 @@
-<p>login works!</p>
+<!-- Default form login -->
+<div class="login">
+    <form [formGroup]="loginForm" class="text-center border border-light p-5">
+
+        <p class="h4 mb-4">Sign in</p>
+      
+        <!-- Email -->
+        <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail" formControlName="email" />
+        
+        <!-- Password -->
+        <input type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password" formControlName="password" />
+
+        
+        <!-- Sign in button -->
+        <button color="info" block="true" class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">Sign in</button>
+
+        <br />
+        <br />
+      
+        <!-- Register -->
+        <p>Not a member?
+          <a href="signup">Register</a>
+        </p>
+      
+      </form>
+</div>
