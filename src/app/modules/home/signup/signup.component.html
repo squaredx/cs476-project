@@ -4,6 +4,10 @@
 
       <p class="h4 mb-4">Sign up</p>
 
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{errorMessage}}
+      </div>
+
       <div class="form-row mb-4">
         <div class="col">
           <!-- First name -->

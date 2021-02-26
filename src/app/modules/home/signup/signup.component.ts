@@ -11,6 +11,8 @@ import { FirebaseService } from 'src/app/shared/services/firebase.service';
 })
 export class SignupComponent implements OnInit {
 
+  errorMessage: string;
+
   signupForm = this.formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
@@ -28,10 +30,10 @@ export class SignupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+      this.errorMessage = '';
   }
 
   onSubmit(): void {
-    console.log(this.signupForm);
     const data: ISignupData = {
       firstName: this.signupForm.controls.firstName.value,
       lastName: this.signupForm.controls.lastName.value,
@@ -42,10 +44,17 @@ export class SignupComponent implements OnInit {
       companyDesc: this.signupForm.controls.companyDesc.value,
     }
 
-    this.firebase.signup(data).then( (result) => {
-      this.router.navigateByUrl(`/company/${result.user.uid}`)
-    }).catch( (err) => {
-      console.log(err.message);
-    })
+    //TODO: Validation messages
+
+    this.errorMessage = '';
+
+    if(this.signupForm.valid) {
+      this.firebase.signup(data).then( (result) => {
+        this.router.navigateByUrl(`/company/${result.user.uid}`)
+      }).catch( (err) => {
+        this.errorMessage = err.message;
+        console.log(err.message);
+      });
+    }
   }
 }
