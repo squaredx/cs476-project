@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuard } from 'src/app/shared/guards/auth.guard';
+import { FirebaseService } from 'src/app/shared/services/firebase.service';
 
 const routes: Routes = [
   {
@@ -20,6 +21,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes)
+  ],
+  providers: [
+    FirebaseService,
   ]
 })
 export class CompanyModule { }

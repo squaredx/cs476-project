@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { first, tap } from 'rxjs/operators';
+import { first, map, tap } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 import { ISignupData } from '../interfaces/user-signup';
 
 import firebase from 'firebase/app';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { CompanyDetailsAdapter } from '../adapters/company-details.adapter';
+import { ICompanyDetails } from '../interfaces/company-details';
+import { IEntry } from '../interfaces/entry';
+import { IDashboard } from '../interfaces/dashboard';
 
 
 @Injectable({
@@ -76,40 +78,111 @@ export class FirebaseService {
   }
   //TODO: Add firestore stuff here aswell
 
-  //Maybe use composition??
-  //getProduct()
-  //getInventory()
-  //getBill
-  //getOrder()
-
-  //getItem(type: Type, id: string)
-  //  --switch type
-  //    -type.get(id) <-use composition
-  //      return the data from the above operation
-
+  get(companyId: string, type: string, docId: string): Observable<IEntry> {
+    return this.fs.collection(`company/${companyId}/${type}`)
+      .doc<IEntry>(docId)
+      .snapshotChanges()
+      .pipe(
+        map(doc => {
+          if (doc.payload.exists) {
+            const data = doc.payload.data() as IEntry;
+            const payloadID = doc.payload.id;
+            return { id: payloadID, ...data};
+          }
+        })
+      );
+  }
   //---------------------------------
 
-  //getManyProduct()
-  //getManyInventory()
-  //getManyBill
-  //getManyOrder()
-
-  //getManyItems(type: Type)
-  //same idea as above
-  //  --switch type
-  //    -type.get(id) <-use composition
-  //      return the data from the above operation
+  list(companyId: string, type: string): Observable<IEntry[]> {
+    return this.fs.collection(`company/${companyId}/${type}`).snapshotChanges().pipe(
+      map(changes => {
+        return changes.map(a => {
+          const data = a.payload.doc.data() as IEntry;
+          data.id = a.payload.doc.id;
+          return data;
+        })
+      })
+    );
+  }
 
   //---------------------------------
 
   //getDashboard()
-  getDashboard(id: string) {
-    //return new Promise<firebase.firestore.DocumentSnapshot>();
+  //TODO: Create a dashboard object
+  getDashboard(id: string): Observable<IDashboard> {
+    return this.fs.collection(`dashboard`)
+      .doc<IDashboard>(id)
+      .snapshotChanges()
+      .pipe(
+        map(doc => {
+          if (doc.payload.exists) {
+            const data = doc.payload.data();
+            const payloadID = doc.payload.id;
+            return { id: payloadID, ...data};
+          }
+        })
+      );
   }
 
-  //getCompanyDetails()
+  getCompanyDetails(id: string): Observable<ICompanyDetails> {
+    return this.fs.collection('company')
+      .doc<ICompanyDetails>(id)
+      .snapshotChanges()
+      .pipe(
+        map(doc => {
+          if (doc.payload.exists) {
+            const data = doc.payload.data() as ICompanyDetails;
+            const payloadID = doc.payload.id;
+            return { id: payloadID, ...data};
+          }
+        })
+      );
+  }
 
-  getCompanyDetails(id: string){
-    //this.fs.firestore.collection('company').doc(id).withConverter();
+  //Setters
+  
+  add(companyId: string, type: string, entry: IEntry): Promise<IEntry> {
+    return new Promise<IEntry> ((resolve, reject) => {
+      this.fs.collection(`company/${companyId}/${type}`)
+        .add(this._firebaseSerialize(entry))
+        .then((ref) => {
+          const newEntry = { //TODO: see if this actually updates ID
+            id: ref.id,
+            ...entry,
+          };
+          resolve(newEntry);
+        })
+    });
+  }
+
+  update(companyId: string, type: string, entry: IEntry): Promise<IEntry> {
+    return new Promise<IEntry>((resolve, reject) => {
+      this.fs.collection(`company/${companyId}/${type}`)
+        .doc<IEntry>(entry.id)
+        .set(this._firebaseSerialize(entry))
+        .then(() => {
+          resolve({
+            ...entry
+          });
+        });
+    });
+  }
+
+  //delete entry
+  delete(companyId: string, type: string, docId: string): Promise<void> {
+    return new Promise<void> ((resolve, reject) => {
+      this.fs.collection(`company/${companyId}/${type}`)
+        .doc<IEntry>(docId)
+        .delete()
+        .then(() => {
+          resolve();
+        });
+    });
+  }
+
+  //convert the javascript object into an object for firebase
+  private _firebaseSerialize<T>(object: T) {
+    return JSON.parse(JSON.stringify(object));
   }
 }
