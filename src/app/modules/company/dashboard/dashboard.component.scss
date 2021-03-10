@@ -1,0 +1,71 @@
+
+.header{
+    display: flex;
+    justify-content: center;
+}
+h3{
+    font-weight: bold;
+    margin: 20px;
+}
+h4{
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.component{
+    border: 3px solid blue;
+    border-radius: 1ch;
+    width: 400px;
+    height: 150px;
+    background-color: rgb(189, 87, 248);
+    display: inline-block;
+    margin: 20px auto;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+}
+.body{
+    width: 100%;
+}
+.profit{
+    margin-top: 20px;
+    margin-left: 11px;
+    border: 3px solid blue;
+    border-radius: 1ch;
+    background-color: rgb(189, 87, 248);
+    height: 320px;
+    text-align: center;
+    float: left;
+    width: 64%;
+    color: white;
+}
+.expense{
+    margin-top: 20px;
+    margin-left: 13px;
+    border: 3px solid blue;
+    border-radius: 1ch;
+    background-color: rgb(189, 87, 248);
+    height: 320px;
+    text-align: center;
+    float: left;
+    width: 34%;
+    color: white;
+}
+h5{
+    color: white;
+    margin: 10px;
+    font-size: 20px;
+}
+ul{
+    margin-top: 15px;
+    text-align: left;
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+a:hover{
+    color: blue;
+}

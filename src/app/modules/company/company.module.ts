@@ -3,6 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuard } from 'src/app/shared/guards/auth.guard';
+import { FirebaseService } from 'src/app/shared/services/firebase.service';
+import { BillComponent } from './bill/bill.component';
+import { InventoryComponent } from './inventory/inventory.component';
+import { OrderComponent } from './order/order.component';
+import { ProductComponent } from './product/product.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 const routes: Routes = [
   {
@@ -11,15 +17,47 @@ const routes: Routes = [
     pathMatch: 'full',
     canActivate: [AuthGuard]
   },
+  {
+    path: ':id/order',
+    component: OrderComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: ':id/bill',
+    component: BillComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: ':id/inventory',
+    component: InventoryComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: ':id/product',
+    component: ProductComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
+  },
 ]
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+    BillComponent,
+    InventoryComponent,
+    OrderComponent,
+    ProductComponent,
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    AgGridModule.withComponents([]),
+  ],
+  providers: [
+    FirebaseService,
   ]
 })
 export class CompanyModule { }

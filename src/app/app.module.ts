@@ -15,6 +15,7 @@ import {
   RiLoginBoxLine,
   RemixIconModule,
 } from 'angular-remix-icon';
+import { CompanyinventoryComponent } from './modules/companyinventory/companyinventory.component';
 
 const icons = {
   RiHome4Line,
@@ -27,6 +28,7 @@ const icons = {
 @NgModule({
   declarations: [
     AppComponent,
+    CompanyinventoryComponent,
   ],
   imports: [
     BrowserModule,
