@@ -14,6 +14,10 @@ export class OrderComponent implements OnInit {
   public rowData;
   
   constructor() { 
+    
+  }
+
+  ngOnInit(): void {
     this.columnDefs = [
       { 
         headerName: 'Order', 
@@ -70,9 +74,6 @@ export class OrderComponent implements OnInit {
     ];
 
     this.defaultColDef = { resizable: true, sortable: true, filter: true, editable: true, };
-  }
-
-  ngOnInit(): void {
   }
 
 }

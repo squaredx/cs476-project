@@ -53,14 +53,12 @@ export class InventoryComponent implements OnInit {
         Amount: '10',
         Date: '2021-08-08',
         Last: '2021-08-05',
-        uid: 0,
       },
       {
         Item: 'Walmart free-run eggs 16pack',
         Amount: '20',
         Date: '2021-08-08',
         Last: '2021-08-05',
-        uid: 1,
       }
     ];
 
@@ -71,6 +69,11 @@ export class InventoryComponent implements OnInit {
   onRemoveSelected() {
     var selectedData = this.gridApi.getSelectedRows();
     this.gridApi.applyTransaction({ remove: selectedData });
+  }
+
+  onGridReady(params) {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
   }
 
   ngOnInit(): void {

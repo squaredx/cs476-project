@@ -7,11 +7,12 @@
         class="grid"
         [columnDefs]="columnDefs"
         [defaultColDef]="defaultColDef"
-        [rowData]="rowData">
+        [rowData]="rowData"
+        (gridReady)="onGridReady($event)">
     </ag-grid-angular>
 </div>
 
 <div style="text-align: center;">
     <button style="background-color: rgb(29, 252, 29)" class="btn btn-primary">Add</button>
-    <button style="background-color: rgb(231, 51, 6)" class="btn btn-primary" onclick="onRemoveSelected()">Delete</button>
+    <button style="background-color: rgb(231, 51, 6)" class="btn btn-primary" (click)="onRemoveSelected()">Delete</button>
 </div>
