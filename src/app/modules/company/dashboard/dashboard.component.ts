@@ -3,7 +3,6 @@ import { IEntry } from 'src/app/shared/interfaces/entry';
 import { FirebaseService } from 'src/app/shared/services/firebase.service';
 import firebase from 'firebase/app';
 
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
