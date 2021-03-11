@@ -1,37 +1,7 @@
 .header {
     background-color: rgb(116, 209, 240);
-    height: 90px;
 }
 
-.logo {
-    padding-bottom: 70px;
-    padding-left: 20px;
-    height: 200px;
-    width: 150px;
-    position: relative;
-    bottom: 20px;
-}
-
-.navbar {
-    padding: 30px;
-    float: right;
-    justify-content: space-between;
-    font-size: 20px;
-    font-family: Comic Sans MS;
-    width: auto;
-}
-.icon{
-    padding-top: 3px;
-}
-a {
-    padding-right: 2.5rem;
-    color: black;
-    text-decoration: none;
-}
-
-a:hover {
-    color: white;
-}
 .footer {
     background-color: rgb(116, 209, 240);
     height: 35px;
@@ -39,19 +9,11 @@ a:hover {
     position: absolute;
     bottom: 0;
     width: 100%;
+    display: flex;
+    align-items: center;
 }
 .footer p {
     font-size: 18px;
-    font-family: Fantasy;
-    padding-top: 8px;
     padding-left: 20px;
-}
-
-
-.blue-icon {
-    color: blue;
-}
-.large-icon {
-    width: 30px;
-    height: 30px;
+    padding-top: 15px;
 }
