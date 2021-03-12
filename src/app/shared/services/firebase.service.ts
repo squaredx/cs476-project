@@ -54,7 +54,7 @@ export class FirebaseService {
     });
   }
 
-  logout() {
+  logout(): void {
     this.auth.signOut()
       .then(() => {
         localStorage.removeItem('user');
@@ -107,23 +107,6 @@ export class FirebaseService {
   }
 
   //---------------------------------
-
-  //getDashboard()
-  //TODO: Create a dashboard object
-  getDashboard(id: string): Observable<IDashboard> {
-    return this.fs.collection(`dashboard`)
-      .doc<IDashboard>(id)
-      .snapshotChanges()
-      .pipe(
-        map(doc => {
-          if (doc.payload.exists) {
-            const data = doc.payload.data();
-            const payloadID = doc.payload.id;
-            return { id: payloadID, ...data};
-          }
-        })
-      );
-  }
 
   getCompanyDetails(id: string): Observable<ICompanyDetails> {
     return this.fs.collection('company')

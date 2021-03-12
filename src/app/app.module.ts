@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireFunctionsModule, USE_EMULATOR} from '@angular/fire/functions';
 import { environment } from '../environments/environment';
 
 import {
@@ -15,6 +16,7 @@ import {
   RiLoginBoxLine,
   RemixIconModule,
 } from 'angular-remix-icon';
+import { HttpClientModule } from '@angular/common/http';
 
 const icons = {
   RiHome4Line,
@@ -33,6 +35,7 @@ const icons = {
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    AngularFireFunctionsModule,
     RemixIconModule.configure(icons),
   ],
   providers: [],
