@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
       .subscribe(params => this.returnUrl = params['return']);
   }
 
-  onSubmit() {
+  onSubmit(): void {
     // reset error message
     this.errorMessage = '';
 
