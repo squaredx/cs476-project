@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { Router } from '@angular/router';
 import { ISignupData } from 'src/app/shared/interfaces/user-signup';
 import { FirebaseService } from 'src/app/shared/services/firebase.service';
+import { ConfirmedValidator } from './confirm-password.validator';
 
 @Component({
   selector: 'app-signup',
@@ -22,6 +23,8 @@ export class SignupComponent implements OnInit {
     phoneNumber: [''],
     companyName: ['', Validators.required],
     companyDesc: ['']
+  }, {
+    validators: ConfirmedValidator('password', 'confirmPassword')
   });
 
   constructor(
