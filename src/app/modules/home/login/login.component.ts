@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from 'src/app/shared/services/firebase.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -10,11 +10,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  returnUrl: string = '';
+
+  errorMessage = '';
+  returnUrl = '';
 
   loginForm = this.formBuilder.group({
-    email: ['', Validators.email],
-    password: ['', Validators.required]
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)] ]
   });
 
   constructor(
@@ -27,29 +29,51 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     //TODO: Fix the return URL when logged in
     this.route.queryParams
-      .subscribe (params => this.returnUrl = params['return']);
+      .subscribe(params => this.returnUrl = params['return']);
   }
 
   onSubmit() {
-    //do input checking here 
-    if(this.username && this.password) {
-      this.fb.login(this.username, this.password)
+    // reset error message
+    this.errorMessage = '';
+
+    // check email validation (angular and firebase provide email format checking)
+    if (!this.email.value) {
+      this.errorMessage = 'Please enter an email';
+      return;
+    }
+    // check password validation
+    if (!this.password.value || this.password.value.length < 6) {
+      this.errorMessage = 'Please enter a valid password';
+      return;
+    }
+    if (this.loginForm.valid) {
+      this.fb.login(this.emailValue, this.passwordValue)
         .then((res) => {
-          //success! navigate to the return url
+          // success! navigate to the return url
           this.returnUrl = this.returnUrl ?? `/company/${res.user.uid}`;
           this.router.navigateByUrl(this.returnUrl);
         })
         .catch((err) => {
+          this.errorMessage = err.message;
           console.log(err.message);
         });
     }
   }
 
-  get username() {
+  get email(): AbstractControl {
+    return this.loginForm.controls.email;
+  }
+
+  get password(): AbstractControl {
+    return this.loginForm.controls.password;
+  }
+
+
+  get emailValue(): any {
     return this.loginForm.controls.email.value;
   }
 
-  get password() {
+  get passwordValue(): any {
     return this.loginForm.controls.password.value;
   }
 }

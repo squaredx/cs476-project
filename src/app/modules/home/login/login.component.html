@@ -1,13 +1,35 @@
 <!-- Default form login -->
 <div class="login">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="text-center border border-light p-5">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="text-center p-3">
 
         <p class="h4 mb-4">Sign in</p>
+
+        <div class="alert alert-danger" *ngIf="errorMessage">
+          {{errorMessage}}
+        </div>
       
         <!-- Email -->
+        <label for="email">Email</label>
+        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+          <div *ngIf="email.errors.required">
+            Email is required
+          </div>
+          <div *ngIf="email.errors.email && email.touched">
+            Email is not in correct format
+          </div>
+        </div>
         <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail" formControlName="email" />
         
         <!-- Password -->
+        <label for="password">Password</label>
+        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger">
+          <div *ngIf="password.errors.required">
+            Password is required
+          </div>
+          <div *ngIf="password.errors.minlength">
+            Password must be at least 6 characters
+          </div>
+        </div>
         <input type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password" formControlName="password" />
 
         
