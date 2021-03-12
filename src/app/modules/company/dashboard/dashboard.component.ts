@@ -4,6 +4,8 @@ import firebase from 'firebase/app';
 
 import { IEntry } from '../../../shared/interfaces/entry';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
+import { IDashboard } from 'src/app/shared/interfaces/dashboard';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,10 +14,17 @@ import { DashboardService } from 'src/app/shared/services/dashboard.service';
 })
 export class DashboardComponent implements OnInit {
 
+  data: Observable<IDashboard>;
+
   constructor(
     private fb: FirebaseService,
     private ds: DashboardService,
   ) { }
+
+  // Here is what we need to do to get information from the dashboard!
+  // <div>
+  //   income: {{(data | async)?.projectedIncome}}
+  // </div>  
 
   ngOnInit(): void {
     // this.fb.list('8tm64ej1O7e2Yc16zt2nddgNqzr2', 'bills').subscribe((value) => {
@@ -48,17 +57,7 @@ export class DashboardComponent implements OnInit {
     //Delete entry
     // this.fb.delete('8tm64ej1O7e2Yc16zt2nddgNqzr2', 'bills', 'CEkDaqYXkHMVnzi55JeD');
 
-    this.ds.getDashboard('8tm64ej1O7e2Yc16zt2nddgNqzr2').subscribe({
-      next(res) {
-        console.log(res);
-      },
-      error(err) {
-        console.log(err);
-      },
-      complete() {
-        console.log('done');
-      }
-    });
+    this.data = this.ds.getDashboard('8tm64ej1O7e2Yc16zt2nddgNqzr2');
   }
 
 }
