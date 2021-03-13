@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FirebaseService } from 'src/app/shared/services/firebase.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FireauthService } from 'src/app/shared/services/fireauth.service';
 
 
 @Component({
@@ -20,14 +20,14 @@ export class LoginComponent implements OnInit {
   });
 
   constructor(
-    private fb: FirebaseService,
+    private auth: FireauthService,
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
-    //TODO: Fix the return URL when logged in
+    // TODO: Fix the return URL when logged in
     this.route.queryParams
       .subscribe(params => this.returnUrl = params['return']);
   }
@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
       return;
     }
     if (this.loginForm.valid) {
-      this.fb.login(this.emailValue, this.passwordValue)
+      this.auth.login(this.emailValue, this.passwordValue)
         .then((res) => {
           // success! navigate to the return url
           this.returnUrl = this.returnUrl ?? ``;

@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 
-export interface ISignupData {
+export interface IUser {
     firstName: string;
     lastName: string;
     email: string;

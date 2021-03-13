@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 
-export interface ICompanyDetails {
+export interface ICompany {
     companyName: string;
     creationDate: firebase.firestore.Timestamp;
     companyDesc?: string;

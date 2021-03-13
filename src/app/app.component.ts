@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from './shared/services/firebase.service';
+import { FireauthService } from './shared/services/fireauth.service';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +9,11 @@ import { FirebaseService } from './shared/services/firebase.service';
 export class AppComponent {
   title = 'WorkMVRK';
 
-  constructor (
-    public firebase: FirebaseService
+  constructor(
+    public auth: FireauthService
   ) {}
 
   signOut(): void {
-    this.firebase.logout();
+    this.auth.logout();
   }
 }

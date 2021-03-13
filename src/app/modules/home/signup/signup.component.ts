@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ISignupData } from 'src/app/shared/interfaces/user-signup';
-import { FirebaseService } from 'src/app/shared/services/firebase.service';
+import { IUser } from 'src/app/shared/interfaces/user';
+import { FireauthService } from 'src/app/shared/services/fireauth.service';
 import { ConfirmedValidator } from './confirm-password.validator';
 
 @Component({
@@ -29,7 +29,7 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private firebase: FirebaseService,
+    private auth: FireauthService,
     private router: Router,
   ) { }
 
@@ -71,7 +71,7 @@ export class SignupComponent implements OnInit {
     }
 
     // create signup object
-    const data: ISignupData = {
+    const data: IUser = {
       firstName: this.firstName.value,
       lastName: this.lastName.value,
       email: this.email.value,
@@ -82,8 +82,8 @@ export class SignupComponent implements OnInit {
     }
 
     if (this.signupForm.valid) {
-      this.firebase.signup(data).then( (result) => {
-        this.router.navigateByUrl(``)
+      this.auth.signup(data).then( (result) => {
+        this.router.navigateByUrl(``);
       }).catch( (err) => {
         this.errorMessage = err.message;
         console.log(err.message);

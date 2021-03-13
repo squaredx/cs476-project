@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from 'src/app/shared/services/firebase.service';
+import { FirestoreService } from 'src/app/shared/services/firestore.service';
 import firebase from 'firebase/app';
 
 import { IEntry } from '../../../shared/interfaces/entry';
@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   data: Observable<IDashboard>;
 
   constructor(
-    private fb: FirebaseService,
+    private fs: FirestoreService,
     private ds: DashboardService,
     private route: ActivatedRoute,
   ) { }
@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit {
   // Here is what we need to do to get information from the dashboard!
   // <div>
   //   income: {{(data | async)?.projectedIncome}}
-  // </div>  
+  // </div>
 
   ngOnInit(): void {
     this.companyId = this.route.snapshot.paramMap.get('id')
@@ -45,12 +45,12 @@ export class DashboardComponent implements OnInit {
       date: firebase.firestore.Timestamp.now().toMillis()
     }
 
-    //Create new entry
+    // Create new entry
     // this.fb.add(this.companyId, 'bills', test).then((res) => {
     //   console.log(res);
     // });
 
-    //Update entry
+    // Update entry
     // this.fb.update('8tm64ej1O7e2Yc16zt2nddgNqzr2', 'bills', test).then((res) => {
     //   console.log(res);
     // })
@@ -61,10 +61,9 @@ export class DashboardComponent implements OnInit {
     //   console.log(listent);
     // })
 
-    //Delete entry
+    // Delete entry
     // this.fb.delete('8tm64ej1O7e2Yc16zt2nddgNqzr2', 'bills', 'CEkDaqYXkHMVnzi55JeD');
 
-  
     // this.data = this.ds.getDashboard(this.companyId);
 
     // this.ds.getDashboard(this.companyId).subscribe((val) => {
