@@ -8,7 +8,9 @@ import { FirebaseService } from '../services/firebase.service';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private fb: FirebaseService, private router: Router) {}
+  constructor(
+    private fb: FirebaseService,
+    private router: Router) {}
 
   async canActivate(
     route: ActivatedRouteSnapshot,
@@ -22,6 +24,11 @@ export class AuthGuard implements CanActivate {
             return: state.url
           }
         });
+        return false;
+      }
+      //check if the user is on the correct project page
+      if(this.fb.userCompanyId !== route.paramMap.get('id')) {
+        this.router.navigateByUrl('');
         return false;
       }
     

@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
       this.fb.login(this.emailValue, this.passwordValue)
         .then((res) => {
           // success! navigate to the return url
-          this.returnUrl = this.returnUrl ?? `/company/${res.user.uid}`;
+          this.returnUrl = this.returnUrl ?? ``;
           this.router.navigateByUrl(this.returnUrl);
         })
         .catch((err) => {

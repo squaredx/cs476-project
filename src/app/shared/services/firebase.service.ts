@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { first, map, tap } from 'rxjs/operators';
+import { first, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 import { ISignupData } from '../interfaces/user-signup';
@@ -17,22 +17,29 @@ import { IDashboard } from '../interfaces/dashboard';
 })
 export class FirebaseService {
   private userDetails: firebase.User = null;
+  private companyId: string = null;
+  private uData: ISignupData = null;
 
   constructor(
     private auth: AngularFireAuth,
     private fs: AngularFirestore
   ) {
-    this.auth.authState.subscribe(user => {
+    this.auth.authState.pipe(
+      switchMap(user => {
         if (user) {
           this.userDetails = user;
           localStorage.setItem('user', JSON.stringify(this.userDetails));
+          return this.getUserDetails(user.uid);
         }
         else {
           this.userDetails = null;
           localStorage.setItem('user', null);
         }
-      }
-    )
+      }),
+    ).subscribe(uData => {
+      this.uData = uData;
+      this.companyId = uData.companyLink.id;
+    });
   }
 
   get isLoggedIn(): boolean {
@@ -42,6 +49,14 @@ export class FirebaseService {
 
   public get user(): firebase.User {
     return this.userDetails;
+  }
+  
+  public get userInformation(): ISignupData {
+    return this.uData;
+  }
+
+  public get userCompanyId(): string {
+    return this.companyId;
   }
 
   login(email: string, password: string): Promise<firebase.auth.UserCredential> {
@@ -108,9 +123,9 @@ export class FirebaseService {
 
   //---------------------------------
 
-  getCompanyDetails(id: string): Observable<ICompanyDetails> {
+  getCompanyDetails(companyId: string): Observable<ICompanyDetails> {
     return this.fs.collection('company')
-      .doc<ICompanyDetails>(id)
+      .doc<ICompanyDetails>(companyId)
       .snapshotChanges()
       .pipe(
         map(doc => {
@@ -121,6 +136,25 @@ export class FirebaseService {
           }
         })
       );
+  }
+
+  getUserDetails(userId: string): Observable<ISignupData> {
+    return this.fs.collection('users')
+      .doc<ISignupData>(userId)
+      .snapshotChanges()
+      .pipe(
+        map(doc => {
+          if (doc.payload.exists) {
+            const data = doc.payload.data() as ISignupData;
+            return data;
+          }
+        })
+      );
+  }
+
+  getUserCompanyId(userId: string): Observable<string> {
+
+    return null;
   }
 
   //Setters

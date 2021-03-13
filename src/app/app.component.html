@@ -20,7 +20,7 @@
         </ul>
         <ul class="navbar-nav">
             <li class="nav-item" *ngIf="this.firebase.isLoggedIn">
-                <a class="nav-link d-flex" routerLink="company/{{this.firebase.user?.uid}}">
+                <a class="nav-link d-flex" routerLink="company/{{this.firebase.userCompanyId}}">
                     <rmx-icon class="icon mr-2" name="dashboard-2-line"></rmx-icon>
                     <span>Dashboard</span>
                 </a>

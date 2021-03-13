@@ -83,7 +83,7 @@ export class SignupComponent implements OnInit {
 
     if (this.signupForm.valid) {
       this.firebase.signup(data).then( (result) => {
-        this.router.navigateByUrl(`/company/${result.user.uid}`)
+        this.router.navigateByUrl(``)
       }).catch( (err) => {
         this.errorMessage = err.message;
         console.log(err.message);
