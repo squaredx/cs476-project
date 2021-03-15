@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Builder } from '../../../shared/services/component-builder';
-import { FirebaseService } from 'src/app/shared/services/firebase.service';
+import { FirestoreService } from 'src/app/shared/services/firestore.service';
 
 @Component({
   selector: 'app-bill',
@@ -30,7 +30,7 @@ export class BillComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private firebase: FirebaseService,
+    private firebase: FirestoreService,
   ) {}
 
   ngOnInit(): void {
