@@ -1,6 +1,11 @@
 import firebase from 'firebase/app';
+import { IEntry } from './entry';
 
 export interface IDashboard {
-    id: string;
-    //TODO: Add things here for dashboard
+    lastUpdated: firebase.firestore.Timestamp;
+    latestInventory: IEntry[];
+    latestProduct: IEntry[];
+    upcomingBills: IEntry[];
+    upcomingOrders: IEntry[];
+    projectedIncome: number;
 }

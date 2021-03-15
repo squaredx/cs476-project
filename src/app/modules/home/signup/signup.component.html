@@ -1,37 +1,84 @@
 <!-- Default form register -->
 <div class="signup">
-  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()"  class="text-center border border-light p-5">
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()"  class="text-center p-3">
 
       <p class="h4 mb-4">Sign up</p>
 
       <div *ngIf="errorMessage" class="alert alert-danger">
         {{errorMessage}}
       </div>
-
-      <div class="form-row mb-4">
+      
+      <div class="form-row mb-3">
         <div class="col">
           <!-- First name -->
-          <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" formControlName="firstName" />
+          <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="text-danger">
+            <div *ngIf="firstName.errors.required">
+              First Name is required
+            </div>
+          </div>
+          <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" formControlName="firstName" [class.is-invalid]="firstName.invalid && (firstName.dirty || firstName.touched)"/>
         </div>
         <div class="col">
           <!-- Last name -->
-          <input type="text" id="defaultRegisterFormLastName" class="form-control" placeholder="Last name" formControlName="lastName" />
+          <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="text-danger">
+            <div *ngIf="lastName.errors.required">
+              Last name is required
+            </div>
+          </div>
+          <input type="text" id="defaultRegisterFormLastName" class="form-control" placeholder="Last name" formControlName="lastName" [class.is-invalid]="lastName.invalid && (lastName.dirty || lastName.touched)"/>
         </div>
       </div>
 
       <!-- E-mail -->
-      <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail" formControlName="email" />
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+        <div *ngIf="email.errors.required">
+          Email is required
+        </div>
+        <div *ngIf="email.errors.email && email.touched">
+          Email is not in correct format
+        </div>
+      </div>
+      <input type="email" id="defaultRegisterFormEmail" class="form-control mb-3" placeholder="E-mail" formControlName="email" [class.is-invalid]="email.invalid && (email.dirty || email.touched)"/>
       
-      <!-- Password -->
-      <input type="password" id="defaultRegisterFormPassword" class="form-control mb-4" placeholder="Password" formControlName="password" />
+      <div class="form-row mb-3">
+        <div class="col">
+          <!-- Password -->
+          <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger">
+            <div *ngIf="password.errors.required">
+              Password is required
+            </div>
+            <div *ngIf="password.errors.minlength">
+              Password must be at least 6 characters
+            </div>
+          </div>
+          <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" formControlName="password" [class.is-invalid]="password.invalid && (password.dirty || password.touched)"/>
+        </div>
+        <div class="col">
+          <!-- Confirm Password -->
+          <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)" class="text-danger">
+            <div *ngIf="confirmPassword.errors.required">
+              Confirm password is required
+            </div>
+            <div *ngIf="confirmPassword.errors.confirmedValidator">
+              Password does not match
+            </div>
+          </div>
+          <input type="password" id="defaultRegisterForConfirmPassword" class="form-control" placeholder="Confirm Password" formControlName="confirmPassword" [class.is-invalid]="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)"/>
+        </div>
+      </div>
       
       <!-- Phone number -->
-      <input type="text" id="defaultRegisterPhonePassword" class="form-control mb-4" placeholder="Phone number (optional)" formControlName="phoneNumber" />
+      <input type="text" id="defaultRegisterPhonePassword" class="form-control mb-3" placeholder="Phone number (optional)" formControlName="phoneNumber" />
 
       <!-- Company name -->
-      <input type="text" id="defaultRegisterFromCompany" class="form-control mb-4" placeholder="Company name" formControlName="companyName" />
+      <div *ngIf="companyName.invalid && (companyName.dirty || companyName.touched)" class="text-danger">
+        <div *ngIf="companyName.errors.required">
+          Company name is required
+        </div>
+      </div>
+      <input type="text" id="defaultRegisterFromCompany" class="form-control mb-3" placeholder="Company name" formControlName="companyName" [class.is-invalid]="companyName.invalid && (companyName.dirty || companyName.touched)"/>
 
-      <textarea type="text" class="form-control mb-4" placeholder="Company description (optional)" formControlName="companyDesc"></textarea>
+      <textarea type="text" class="form-control mb-3" placeholder="Company description (optional)" formControlName="companyDesc"></textarea>
 
       <!-- Sign up button -->
       <button color="info" block="true" class="btn btn-primary" type="submit" [disabled]="!signupForm.valid">Submit</button>
