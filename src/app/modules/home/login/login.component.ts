@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FirebaseService } from 'src/app/shared/services/firebase.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FireauthService } from 'src/app/shared/services/fireauth.service';
 
 
 @Component({
@@ -10,46 +10,70 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  returnUrl: string = '';
+
+  errorMessage = '';
+  returnUrl = '';
 
   loginForm = this.formBuilder.group({
-    email: ['', Validators.email],
-    password: ['', Validators.required]
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)] ]
   });
 
   constructor(
-    private fb: FirebaseService,
+    private auth: FireauthService,
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
-    //TODO: Fix the return URL when logged in
+    // TODO: Fix the return URL when logged in
     this.route.queryParams
-      .subscribe (params => this.returnUrl = params['return']);
+      .subscribe(params => this.returnUrl = params['return']);
   }
 
-  onSubmit() {
-    //do input checking here 
-    if(this.username && this.password) {
-      this.fb.login(this.username, this.password)
+  onSubmit(): void {
+    // reset error message
+    this.errorMessage = '';
+
+    // check email validation (angular and firebase provide email format checking)
+    if (!this.email.value) {
+      this.errorMessage = 'Please enter an email';
+      return;
+    }
+    // check password validation
+    if (!this.password.value || this.password.value.length < 6) {
+      this.errorMessage = 'Please enter a valid password';
+      return;
+    }
+    if (this.loginForm.valid) {
+      this.auth.login(this.emailValue, this.passwordValue)
         .then((res) => {
-          //success! navigate to the return url
-          this.returnUrl = this.returnUrl ?? `/company/${res.user.uid}`;
+          // success! navigate to the return url
+          this.returnUrl = this.returnUrl ?? ``;
           this.router.navigateByUrl(this.returnUrl);
         })
         .catch((err) => {
+          this.errorMessage = err.message;
           console.log(err.message);
         });
     }
   }
 
-  get username() {
+  get email(): AbstractControl {
+    return this.loginForm.controls.email;
+  }
+
+  get password(): AbstractControl {
+    return this.loginForm.controls.password;
+  }
+
+
+  get emailValue(): any {
     return this.loginForm.controls.email.value;
   }
 
-  get password() {
+  get passwordValue(): any {
     return this.loginForm.controls.password.value;
   }
 }

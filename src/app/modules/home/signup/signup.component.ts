@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ISignupData } from 'src/app/shared/interfaces/user-signup';
-import { FirebaseService } from 'src/app/shared/services/firebase.service';
+import { IUser } from 'src/app/shared/interfaces/user';
+import { FireauthService } from 'src/app/shared/services/fireauth.service';
+import { ConfirmedValidator } from './confirm-password.validator';
 
 @Component({
   selector: 'app-signup',
@@ -11,21 +12,24 @@ import { FirebaseService } from 'src/app/shared/services/firebase.service';
 })
 export class SignupComponent implements OnInit {
 
-  errorMessage: string;
+  errorMessage = '';
 
   signupForm = this.formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    email: ['', Validators.email],
-    password: ['', Validators.minLength(8)],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', Validators.required],
     phoneNumber: [''],
     companyName: ['', Validators.required],
     companyDesc: ['']
+  }, {
+    validators: ConfirmedValidator('password', 'confirmPassword')
   });
 
   constructor(
     private formBuilder: FormBuilder,
-    private firebase: FirebaseService,
+    private auth: FireauthService,
     private router: Router,
   ) { }
 
@@ -34,27 +38,88 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const data: ISignupData = {
-      firstName: this.signupForm.controls.firstName.value,
-      lastName: this.signupForm.controls.lastName.value,
-      email: this.signupForm.controls.email.value,
-      password: this.signupForm.controls.password.value,
-      phoneNumber: this.signupForm.controls.phoneNumber.value,
-      companyName: this.signupForm.controls.companyName.value,
-      companyDesc: this.signupForm.controls.companyDesc.value,
+    this.errorMessage = '';
+    // check first name validation
+    if (!this.firstName.value) {
+      this.errorMessage = 'Please enter a first name';
+      return;
+    }
+    // check last name validation
+    if (!this.lastName.value) {
+      this.errorMessage = 'Please enter a last name';
+      return;
+    }
+    // check email validation (angular and firebase provide email format checking)
+    if (!this.email.value) {
+      this.errorMessage = 'Please enter an email';
+      return;
+    }
+    // check password validation
+    if (!this.password.value || this.password.value.length < 6) {
+      this.errorMessage = 'Please enter a valid password';
+      return;
+    }
+    // check if confirm password is correct
+    if (this.password.value !== this.confirmPassword.value) {
+      this.errorMessage = 'Confirm password does not equal original password';
+      return;
+    }
+    // check first name validation
+    if (!this.companyName.value) {
+      this.errorMessage = 'Please enter a company name';
+      return;
     }
 
-    //TODO: Validation messages
+    // create signup object
+    const data: IUser = {
+      firstName: this.firstName.value,
+      lastName: this.lastName.value,
+      email: this.email.value,
+      password: this.password.value,
+      phoneNumber: this.phoneNumber.value,
+      companyName: this.companyName.value,
+      companyDesc: this.companyDesc.value,
+    }
 
-    this.errorMessage = '';
-
-    if(this.signupForm.valid) {
-      this.firebase.signup(data).then( (result) => {
-        this.router.navigateByUrl(`/company/${result.user.uid}`)
+    if (this.signupForm.valid) {
+      this.auth.signup(data).then( (result) => {
+        this.router.navigateByUrl(``);
       }).catch( (err) => {
         this.errorMessage = err.message;
         console.log(err.message);
       });
     }
+  }
+
+  get firstName(): AbstractControl {
+    return this.signupForm.controls.firstName;
+  }
+
+  get lastName(): AbstractControl {
+    return this.signupForm.controls.lastName;
+  }
+
+  get email(): AbstractControl {
+    return this.signupForm.controls.email;
+  }
+
+  get password(): AbstractControl {
+    return this.signupForm.controls.password;
+  }
+
+  get confirmPassword(): AbstractControl {
+    return this.signupForm.controls.confirmPassword;
+  }
+
+  get phoneNumber(): AbstractControl {
+    return this.signupForm.controls.phoneNumber;
+  }
+
+  get companyName(): AbstractControl {
+    return this.signupForm.controls.companyName;
+  }
+
+  get companyDesc(): AbstractControl {
+    return this.signupForm.controls.companyDesc;
   }
 }

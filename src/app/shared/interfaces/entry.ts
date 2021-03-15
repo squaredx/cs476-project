@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 
 export interface IEntry {
-    id: string;
+    id?: string;
     name: string;
     type: string;
     description: string;

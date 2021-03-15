@@ -1,4 +1,6 @@
-export interface ISignupData {
+import firebase from 'firebase/app';
+
+export interface IUser {
     firstName: string;
     lastName: string;
     email: string;
@@ -6,4 +8,5 @@ export interface ISignupData {
     phoneNumber?: string;
     companyName: string;
     companyDesc?: string;
+    companyLink?: firebase.firestore.DocumentReference;
 }
