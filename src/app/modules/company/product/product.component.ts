@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Builder } from '../../../shared/services/component-builder';
+import { FirebaseService } from 'src/app/shared/services/firebase.service';
 
 @Component({
   selector: 'app-product',
@@ -6,66 +10,70 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit {
-  private gridApi;
-  private gridColumnApi;
+  errorMessage: string;
+  private componentBuilder: Builder;
+  inventory: Builder[];
 
-  public columnDefs;
-  public defaultColDef;
-  public rowData;
+  productForm = this.formBuilder.group({
+    item: ['', Validators.required],
+    number: ['', Validators.required],
+    date: ['', Validators.required],
+    description: ['', Validators.required],
+    status: ['', Validators.required]
+  });
 
-  constructor() { 
-    this.columnDefs = [
-      {
-        field: 'Item',
-        headerName: 'Product',
-        checkboxSelection: true,
-        width: 250,
-        minWidth: 200,
-        maxWidth:350,
-      },
-      {
-        field: 'Amount',
-        headerName: 'Amount',
-        width: 200,
-        minWidth: 150,
-        maxWidth:250,
-      },
-      {
-        field: 'Date',
-        headerName: 'Date',
-        width: 200,
-        minWidth: 150,
-        maxWidth:250,
-      },
-      {
-        field: 'Last',
-        headerName: 'Last Updated',
-        width: 200,
-        minWidth: 150,
-        maxWidth:250,
-      },
-    ];
+  closeResult: string;
+  deleteId: string;
 
-    this.rowData = [
-      {
-        Item: 'Egg',
-        Amount: '10',
-        Date: '2021-08-08',
-        Last: '2021-08-05',
-      },
-      {
-        Item: 'Walmart free-run eggs 16pack',
-        Amount: '20',
-        Date: '2021-08-08',
-        Last: '2021-08-05',
-      }
-    ];
-
-    this.defaultColDef = { resizable: true, sortable: true, filter: true, editable: true, };
-  }
-
+  constructor(
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private firebase: FirebaseService,
+  ) {}
 
   ngOnInit(): void {
+    this.errorMessage = '';
+    this.componentBuilder = new Builder();
   }
+
+  onSubmit(): void {
+    const product = this.componentBuilder.setId("")
+                    .setItemName(this.productForm.controls.item.value)
+                    .setNumber(this.productForm.controls.number.value)
+                    .setStartDate(this.productForm.controls.date.value)
+                    .setDescription(this.productForm.controls.description.value)
+                    .setStatus(this.productForm.controls.status.value)
+                    .setEndDate("")
+                    .setReference("").createComponent();
+                    console.log(product);
+  }
+
+  openDelete(targetModel, product: Builder){
+    this.deleteId = product.getId();
+    this.modalService.open(targetModel, {
+      backdrop: 'static',
+      size: 'lg'
+    });
+  }
+
+  open(content) { 
+    this.modalService.open(content, 
+   {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => { 
+      this.closeResult = `Closed with: ${result}`; 
+    }, (reason) => { 
+      this.closeResult =  
+         `Dismissed ${this.getDismissReason(reason)}`; 
+    }); 
+  } 
+  
+  private getDismissReason(reason: any): string { 
+    if (reason === ModalDismissReasons.ESC) { 
+      return 'by pressing ESC'; 
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) { 
+      return 'by clicking on a backdrop'; 
+    } else { 
+      return `with: ${reason}`; 
+    } 
+  } 
 
 }

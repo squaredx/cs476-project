@@ -9,6 +9,7 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { OrderComponent } from './order/order.component';
 import { ProductComponent } from './product/product.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -55,6 +56,8 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     AgGridModule.withComponents([]),
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [
     FirebaseService,

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Builder } from '../../../shared/services/component-builder';
+import { FirebaseService } from 'src/app/shared/services/firebase.service';
 
 @Component({
   selector: 'app-order',
@@ -6,73 +10,72 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./order.component.scss']
 })
 export class OrderComponent implements OnInit {
-  private gridApi;
-  private gridColumnApi;
+  errorMessage: string;
+  private componentBuilder: Builder;
+  order: Builder[];
 
-  public columnDefs;
-  public defaultColDef;
-  public rowData;
+  orderForm = this.formBuilder.group({
+    company: ['', Validators.required],
+    amount: ['', Validators.required],
+    startDate: ['', Validators.required],
+    description: ['', Validators.required],
+    status: ['', Validators.required],
+    endDate: ['', Validators.required],
+    reference: ['', Validators.required],
+  });
   
-  constructor() { 
-    this.columnDefs = [
-      { 
-        headerName: 'Order', 
-        field: 'Order',  
-        checkboxSelection: true ,
-        width: 150,
-        minWidth: 100,
-        maxWidth:200,
-      },
-      { 
-        headerName: 'Sending to', 
-        field: 'Vendor', 
-        width: 250,
-        minWidth: 200,
-        maxWidth: 300,
-      },
-      { 
-        headerName: 'Value', 
-        field: 'Value', 
-        width: 200,
-        minWidth: 150,
-        maxWidth: 250,
-      },
-      { 
-        headerName: 'Invoice date', 
-        field: 'Date', 
-        width: 200,
-        minWidth: 150,
-        maxWidth: 250,
-      },
-      { 
-        headerName: 'Shipping Date', 
-        field: 'Shipping', 
-        width: 200,
-        minWidth: 150,
-        maxWidth: 250,
-      },
-    ];
-
-  this.rowData = [
-      { 
-        Order: '1234567', 
-        Vendor: 'Test Company', 
-        Value:'220.98', 
-        Date:'2021-03-05', 
-        Shipping: ' 2021-04-04',
-      },
-      { Order: '1234567', 
-        Vendor: 'Test Company', 
-        Value:'100.98', 
-        Date:'2021-03-05', 
-        Shipping: ' 2021-04-04',
-      },
-    ];
-
-    this.defaultColDef = { resizable: true, sortable: true, filter: true, editable: true, };
-  }
+  closeResult: string;
+  deleteId: string;
+  
+  constructor(
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private firebase: FirebaseService,
+  ) {}
 
   ngOnInit(): void {
+    this.errorMessage = '';
+    this.componentBuilder = new Builder();
   }
+
+  onSubmit(): void {
+    const order = this.componentBuilder.setId("")
+                    .setItemName(this.orderForm.controls.company.value)
+                    .setNumber(this.orderForm.controls.amount.value)
+                    .setStartDate(this.orderForm.controls.startDate.value)
+                    .setDescription(this.orderForm.controls.description.value)
+                    .setStatus(this.orderForm.controls.status.value)
+                    .setEndDate(this.orderForm.controls.endDate.value)
+                    .setReference(this.orderForm.controls.reference.value).createComponent();
+                    console.log(order);
+  }
+
+  openDelete(targetModel, inventory: Builder){
+    this.deleteId = inventory.getId();
+    this.modalService.open(targetModel, {
+      backdrop: 'static',
+      size: 'lg'
+    });
+  }
+
+  open(content) { 
+    this.modalService.open(content, 
+   {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => { 
+      this.closeResult = `Closed with: ${result}`; 
+    }, (reason) => { 
+      this.closeResult =  
+         `Dismissed ${this.getDismissReason(reason)}`; 
+    }); 
+  } 
+  
+  private getDismissReason(reason: any): string { 
+    if (reason === ModalDismissReasons.ESC) { 
+      return 'by pressing ESC'; 
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) { 
+      return 'by clicking on a backdrop'; 
+    } else { 
+      return `with: ${reason}`; 
+    } 
+  } 
 
 }

@@ -1,17 +1,106 @@
 <h3>Order</h3>
 <h4>Company name</h4>
 
-<div class="ag-theme-alpine">
-    <ag-grid-angular 
-        #agGrid
-        class="grid"
-        [columnDefs]="columnDefs"
-        [defaultColDef]="defaultColDef"
-        [rowData]="rowData">
-    </ag-grid-angular>
+<div style="margin: 30px;">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Total Amount</th>
+                <th>Date</th>
+                <th>Due Date</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span>20210312</span></td>
+                <td><span>Slow Pub</span></td>
+                <td><span>783.82</span></td>
+                <td><span>2021-03-01</span></td>
+                <td><span>2021-04-01</span></td>
+                <td><span>Beer</span></td>
+                <td><span>Delivered</span></td>
+                <td>
+                    <button class="btn btn-sm btn-warning" (click)="open(content)">
+                        <i class="fa fa-edit" style="padding-right: 5px;"></i>Update
+                    </button>
+                    <button class="btn btn-sm btn-danger" (click)="openDelete(contentDelete, inventory)">
+                        <i class="fa fa-remove" style="padding-right: 5px;"></i>Delete
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <div style="text-align: center;">
-    <button style="background-color: rgb(29, 252, 29)" class="btn btn-primary">Add</button>
-    <button style="background-color: rgb(231, 51, 6)" class="btn btn-primary">Delete</button>
+    <button (click)="open(content)" style="background-color: rgb(29, 252, 29)" class="btn btn-primary">Add</button>
 </div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-titel" id="modal-basic-title" style="margin-left: -2px;">New Record</h4>
+        <button style="padding-left: 100px; padding-top: 28px;" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="reference">Order Number</label>
+                <div class="input-group">
+                    <input id="reference" class="form-control" formControlName="reference">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="customer">Customer</label>
+                <div class="input-group">
+                    <input id="customer" class="form-control" formControlName="company">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="value">Total Amount</label>
+                <div class="input-group">
+                    <input id="value" class="form-control" formControlName="amount">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="date">Order Date</label>
+                <div class="input-group">
+                    <input id="date" class="form-control" formControlName="startDate">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="deadline">Due Date</label>
+                <div class="input-group">
+                    <input id="deadline" class="form-control" formControlName="endDate">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <div class="input-group">
+                    <input id="description" class="form-control" formControlName="description">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <div class="input-group">
+                    <input id="status" class="form-control" formControlName="status">
+                </div>
+            </div>
+
+            <div class="border text-center">
+                <button data-dismiss="modal" class="btn btn-info" type="submit" (click)="modal.close('Close click')" [disabled]="!orderForm.valid">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+    </div>
+</ng-template>

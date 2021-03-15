@@ -1,17 +1,92 @@
 <h3>Product</h3>
 <h4>Company name</h4>
 
-<div class="ag-theme-alpine">
-    <ag-grid-angular 
-        #agGrid
-        class="grid"
-        [columnDefs]="columnDefs"
-        [defaultColDef]="defaultColDef"
-        [rowData]="rowData">
-    </ag-grid-angular>
+<div class="container">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span>Rootbeer</span></td>
+                <td><span>12</span></td>
+                <td><span>2021-03-01</span></td>
+                <td><span>Need more Rootbeer</span></td>
+                <td><span>Short</span></td>
+                <td>
+                    <button class="btn btn-sm btn-warning" (click)="open(content)">
+                        <i class="fa fa-edit" style="padding-right: 5px;"></i>Update
+                    </button>
+                    <button class="btn btn-sm btn-danger" (click)="openDelete(contentDelete, product)">
+                        <i class="fa fa-remove" style="padding-right: 5px;"></i>Delete
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <div style="text-align: center;">
-    <button style="background-color: rgb(29, 252, 29)" class="btn btn-primary">Add</button>
-    <button style="background-color: rgb(231, 51, 6)" class="btn btn-primary">Delete</button>
+    <button (click)="open(content)" style="background-color: rgb(29, 252, 29)" class="btn btn-primary">Add</button>
 </div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-titel" id="modal-basic-title" style="margin-left: -2px;">New Record</h4>
+        <button style="padding-left: 100px; padding-top: 28px;" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()"> 
+            <div class="form-group">
+                <label for="item">Product</label>
+                <div class="input-group">
+                    <input id="invoice" class="form-control" formControlName="item">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="number">Amount</label>
+                <div class="input-group">
+                    <input id="number" class="form-control" formControlName="number">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <div class="input-group">
+                    <input id="date" class="form-control" formControlName="date">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <div class="input-group">
+                    <input id="description" class="form-control" formControlName="description">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <div class="input-group">
+                    <input id="status" class="form-control" formControlName="status">
+                </div>
+            </div>
+
+            <div class="border text-center">
+                <button data-dismiss="modal" class="btn btn-info" type="submit" (click)="modal.close('Close click')" [disabled]="!productForm.valid">
+                    Submit
+                </button>
+            </div>
+           
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+    </div>
+</ng-template>
+

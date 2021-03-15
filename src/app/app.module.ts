@@ -15,7 +15,8 @@ import {
   RiLoginBoxLine,
   RemixIconModule,
 } from 'angular-remix-icon';
-import { CompanyinventoryComponent } from './modules/companyinventory/companyinventory.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 
 const icons = {
   RiHome4Line,
@@ -28,7 +29,6 @@ const icons = {
 @NgModule({
   declarations: [
     AppComponent,
-    CompanyinventoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +36,8 @@ const icons = {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     RemixIconModule.configure(icons),
+    NgbModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
