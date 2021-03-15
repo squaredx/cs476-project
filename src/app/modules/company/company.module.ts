@@ -9,6 +9,9 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { OrderComponent } from './order/order.component';
 import { ProductComponent } from './product/product.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FirestoreService } from '../../shared/services/firestore.service';
+import { DashboardService } from '../../shared/services/dashboard.service';
 
 const routes: Routes = [
   {
@@ -41,7 +44,7 @@ const routes: Routes = [
     pathMatch: 'full',
     canActivate: [AuthGuard]
   },
-]
+];
 
 @NgModule({
   declarations: [
@@ -55,9 +58,12 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     AgGridModule.withComponents([]),
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [
-    FirebaseService,
+    FirestoreService,
+    DashboardService,
   ]
 })
 export class CompanyModule { }

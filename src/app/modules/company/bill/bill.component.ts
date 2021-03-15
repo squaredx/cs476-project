@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-//import { AgGridAngular } from "ag-grid-angular";
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Builder } from '../../../shared/services/component-builder';
+import { FirebaseService } from 'src/app/shared/services/firebase.service';
 
 @Component({
   selector: 'app-bill',
@@ -7,74 +10,72 @@ import { Component, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./bill.component.scss'],
 })
 export class BillComponent implements OnInit {
+  errorMessage: string;
+  private componentBuilder: Builder;
+  bill: Builder[];
 
-  private gridApi;
-  private gridColumnApi;
+  billForm = this.formBuilder.group({
+    company: ['', Validators.required],
+    amount: ['', Validators.required],
+    startDate: ['', Validators.required],
+    description: ['', Validators.required],
+    status: ['', Validators.required],
+    endDate: ['', Validators.required],
+    reference: ['', Validators.required],
+  });
+  
+  closeResult: string;
+  deleteId: string;
 
-  public columnDefs;
-  public defaultColDef;
-  public rowData;
-
-  constructor() {
-    this.columnDefs = [
-      { 
-        headerName: 'Invoice', 
-        field: 'Invoice',  
-        checkboxSelection: true ,
-        width: 150,
-        minWidth: 100,
-        maxWidth:200,
-      },
-      { 
-        headerName: 'Paying to', 
-        field: 'Vendor', 
-        width: 250,
-        minWidth: 200,
-        maxWidth: 300,
-      },
-      { 
-        headerName: 'Value', 
-        field: 'Value', 
-        width: 200,
-        minWidth: 150,
-        maxWidth: 250,
-      },
-      { 
-        headerName: 'Invoice date', 
-        field: 'Date', 
-        width: 200,
-        minWidth: 150,
-        maxWidth: 250,
-      },
-      { 
-        headerName: 'Payment due', 
-        field: 'Deadline', 
-        width: 200,
-        minWidth: 150,
-        maxWidth: 250,
-      },
-    ];
-
-  this.rowData = [
-      { 
-        Invoice: '1234567', 
-        Vendor: 'Test Company', 
-        Value:'220.98', 
-        Date:'2021-03-05', 
-        Deadline: ' 2021-04-04',
-      },
-      { Invoice: '1234567', 
-        Vendor: 'Test Company', 
-        Value:'100.98', 
-        Date:'2021-03-05', 
-        Deadline: ' 2021-04-04',
-      },
-    ];
-
-    this.defaultColDef = { resizable: true, sortable: true, filter: true, editable: true, };
-  }
+  constructor(
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private firebase: FirebaseService,
+  ) {}
 
   ngOnInit(): void {
-
+    this.errorMessage = '';
+    this.componentBuilder = new Builder();
   }
+
+  onSubmit(): void {
+    const bill = this.componentBuilder.setId("")
+                    .setItemName(this.billForm.controls.company.value)
+                    .setNumber(this.billForm.controls.amount.value)
+                    .setStartDate(this.billForm.controls.startDate.value)
+                    .setDescription(this.billForm.controls.description.value)
+                    .setStatus(this.billForm.controls.status.value)
+                    .setEndDate(this.billForm.controls.endDate.value)
+                    .setReference(this.billForm.controls.reference.value).createComponent();
+                    console.log(bill);
+  }
+
+  openDelete(targetModel, inventory: Builder){
+    this.deleteId = inventory.getId();
+    this.modalService.open(targetModel, {
+      backdrop: 'static',
+      size: 'lg'
+    });
+  }
+
+  open(content) { 
+    this.modalService.open(content, 
+   {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => { 
+      this.closeResult = `Closed with: ${result}`; 
+    }, (reason) => { 
+      this.closeResult =  
+         `Dismissed ${this.getDismissReason(reason)}`; 
+    }); 
+  } 
+  
+  private getDismissReason(reason: any): string { 
+    if (reason === ModalDismissReasons.ESC) { 
+      return 'by pressing ESC'; 
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) { 
+      return 'by clicking on a backdrop'; 
+    } else { 
+      return `with: ${reason}`; 
+    } 
+  } 
+
 }
