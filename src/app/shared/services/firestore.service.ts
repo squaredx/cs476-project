@@ -6,7 +6,7 @@ import { IUser } from '../interfaces/user';
 
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ICompany } from '../interfaces/company';
-import { IEntry } from '../interfaces/entry';
+import { IComponent } from '../interfaces/component';
 
 
 @Injectable({
@@ -18,14 +18,14 @@ export class FirestoreService {
     private angFirestore: AngularFirestore
   ) {}
 
-  get(companyId: string, type: string, docId: string): Observable<IEntry> {
+  get(companyId: string, type: string, docId: string): Observable<IComponent> {
     return this.angFirestore.collection(`company/${companyId}/${type}`)
-      .doc<IEntry>(docId)
+      .doc<IComponent>(docId)
       .snapshotChanges()
       .pipe(
         map(doc => {
           if (doc.payload.exists) {
-            const data = doc.payload.data() as IEntry;
+            const data = doc.payload.data() as IComponent;
             const payloadID = doc.payload.id;
             return { id: payloadID, ...data};
           }
@@ -34,11 +34,11 @@ export class FirestoreService {
   }
   // ---------------------------------
 
-  list(companyId: string, type: string): Observable<IEntry[]> {
+  list(companyId: string, type: string): Observable<IComponent[]> {
     return this.angFirestore.collection(`company/${companyId}/${type}`).snapshotChanges().pipe(
       map(changes => {
         return changes.map(a => {
-          const data = a.payload.doc.data() as IEntry;
+          const data = a.payload.doc.data() as IComponent;
           data.id = a.payload.doc.id;
           return data;
         })
@@ -78,10 +78,10 @@ export class FirestoreService {
   }
 
   // Setters
-  add(companyId: string, type: string, entry: IEntry): Promise<IEntry> {
-    return new Promise<IEntry> ((resolve, reject) => {
+  add(companyId: string, type: string, entry: IComponent): Promise<IComponent> {
+    return new Promise<IComponent> ((resolve, reject) => {
       this.angFirestore.collection(`company/${companyId}/${type}`)
-        .add(this._firebaseSerialize(entry))
+        .add(entry)
         .then((ref) => {
           const newEntry = { // TODO: see if this actually updates ID
             id: ref.id,
@@ -92,11 +92,11 @@ export class FirestoreService {
     });
   }
 
-  update(companyId: string, type: string, entry: IEntry): Promise<IEntry> {
-    return new Promise<IEntry>((resolve, reject) => {
+  update(companyId: string, type: string, entry: IComponent): Promise<IComponent> {
+    return new Promise<IComponent>((resolve, reject) => {
       this.angFirestore.collection(`company/${companyId}/${type}`)
-        .doc<IEntry>(entry.id)
-        .set(this._firebaseSerialize(entry))
+        .doc<IComponent>(entry.id)
+        .set(entry)
         .then(() => {
           resolve({
             ...entry
@@ -109,16 +109,11 @@ export class FirestoreService {
   delete(companyId: string, type: string, docId: string): Promise<void> {
     return new Promise<void> ((resolve, reject) => {
       this.angFirestore.collection(`company/${companyId}/${type}`)
-        .doc<IEntry>(docId)
+        .doc<IComponent>(docId)
         .delete()
         .then(() => {
           resolve();
         });
     });
-  }
-
-  // convert the javascript object into an object for firebase
-  private _firebaseSerialize<T>(object: T): any {
-    return JSON.parse(JSON.stringify(object));
   }
 }

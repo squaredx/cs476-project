@@ -1,17 +1,18 @@
+import * as moment from 'moment';
 import { IComponent } from '../interfaces/component';
+import firebase from 'firebase/app';
 
 export class Builder {
     private id: string;
     private reference: string = "";      //Invoice or Order number
     private itemName: string = "";       //Product or Company name
-    private number: string = "";         //Amount or value
-    private startDate: string = "";      //Invoice date or record creation date
-    private endDate: string = "";
+    private number: number = 0;         //Amount or value
+    private startDate: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();      //Invoice date or record creation date
+    private endDate: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
     private description: string = "";
     private status: string = "";
 
     constructor() {
-
     }
 
     setId(id: string){
@@ -29,18 +30,18 @@ export class Builder {
         return this;
     }
 
-    setNumber(number: string){
+    setNumber(number: number){
         this.number = number;
         return this;
     }
 
     setStartDate(startDate: string){
-        this.startDate = startDate;
+        this.startDate = firebase.firestore.Timestamp.fromDate(moment(startDate, 'YYYY-MM-DD', true).toDate());
         return this;
     }
 
     setEndDate(endDate: string){
-        this.endDate = endDate;
+        this.endDate = firebase.firestore.Timestamp.fromDate(moment(endDate, 'YYYY-MM-DD', true).toDate());
         return this;
     }
 
@@ -58,9 +59,9 @@ export class Builder {
         return this.id;
     }
 
-    createComponent(){
-        return {
-            id: this.id,
+    createComponent() {
+        const obj = {
+            ...(this.id) && {id: this.id},
             reference: this.reference,
             itemName: this.itemName,
             number: this.number,
@@ -68,6 +69,19 @@ export class Builder {
             endDate: this.endDate,
             description: this.description,
             status: this.status,
-        } as IComponent
+        } as IComponent;
+        this.reset();
+        return obj;
+    }
+
+    reset() {
+        this.id = "";
+        this.reference = "";
+        this.itemName = "";
+        this.number = 0;
+        this.startDate = firebase.firestore.Timestamp.now();;
+        this.endDate = firebase.firestore.Timestamp.now();;
+        this.description = "";
+        this.status = "";
     }
 }

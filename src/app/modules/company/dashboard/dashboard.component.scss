@@ -3,16 +3,19 @@
     display: flex;
     justify-content: center;
 }
+
 h3{
     font-weight: bold;
     margin: 20px;
 }
+
 h4{
     margin: 10px auto;
     display: flex;
     justify-content: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
 .component{
     border: 3px solid blue;
     border-radius: 1ch;
@@ -26,9 +29,11 @@ h4{
     text-align: center;
     font-size: 18px;
 }
+
 .body{
     width: 100%;
 }
+
 .profit{
     margin-top: 20px;
     margin-left: 11px;
@@ -41,6 +46,7 @@ h4{
     width: 64%;
     color: white;
 }
+
 .expense{
     margin-top: 20px;
     margin-left: 13px;
@@ -53,19 +59,30 @@ h4{
     width: 34%;
     color: white;
 }
+
 h5{
-    color: white;
+    //color: white;
+    color: black;
+    font-weight: 700;
     margin: 10px;
     font-size: 20px;
 }
+
 ul{
     margin-top: 15px;
     text-align: left;
 }
+
 a{
     text-decoration: none;
-    color: white;
+    color: black;
+    font-weight: 700;
+    //color: white;
 }
 a:hover{
     color: blue;
+}
+
+.col-style {
+    border: 1px solid rgba(86,61,124,0.2)
 }

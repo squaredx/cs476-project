@@ -6,6 +6,7 @@ import { first, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import firebase from 'firebase/app';
 import { IUser } from '../interfaces/user';
 import { FirestoreService } from './firestore.service';
+import { ICompany } from '../interfaces/company';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import { FirestoreService } from './firestore.service';
 export class FireauthService {
   private userDetails: firebase.User = null;
   private companyId: string = null;
+  private companyDetails: ICompany = null;
   private uData: IUser = null;
 
   constructor(

@@ -16,19 +16,19 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><span>20210312</span></td>
-                <td><span>Saskpower</span></td>
-                <td><span>123.99</span></td>
-                <td><span>2021-03-01</span></td>
-                <td><span>2021-04-01</span></td>
-                <td><span>March power bill</span></td>
-                <td><span>Not pay</span></td>
+            <tr *ngFor="let entity of (listData | async)">
+                <td><span>{{entity.reference}}</span></td>
+                <td><span>{{entity.itemName}}</span></td>
+                <td><span>{{entity.number | currency}}</span></td>
+                <td><span>{{entity.startDate.toDate() | date}}</span></td>
+                <td><span>{{entity.endDate.toDate() | date}}</span></td>
+                <td><span>{{entity.description}}</span></td>
+                <td><span>{{entity.status}}</span></td>
                 <td>
-                    <button class="btn btn-sm btn-warning" (click)="open(content)">
+                    <button class="btn btn-sm btn-warning" (click)="open(content, entity)">
                         <i class="fa fa-edit" style="padding-right: 5px;"></i>Update
                     </button>
-                    <button class="btn btn-sm btn-danger" (click)="openDelete(contentDelete, bill)">
+                    <button class="btn btn-sm btn-danger" (click)="delete(entity)">
                         <i class="fa fa-remove" style="padding-right: 5px;"></i>Delete
                     </button>
                 </td>

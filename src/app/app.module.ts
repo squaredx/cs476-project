@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,6 +10,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireFunctionsModule, USE_EMULATOR} from '@angular/fire/functions';
 import { environment } from '../environments/environment';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HotToastModule } from '@ngneat/hot-toast';
 import {
   RiHome4Line,
   RiDashboard2Line,
@@ -16,10 +19,6 @@ import {
   RiLoginBoxLine,
   RemixIconModule,
 } from 'angular-remix-icon';
-
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 
 const icons = {
   RiHome4Line,
@@ -42,6 +41,7 @@ const icons = {
     RemixIconModule.configure(icons),
     NgbModule,
     FormsModule,
+    HotToastModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
