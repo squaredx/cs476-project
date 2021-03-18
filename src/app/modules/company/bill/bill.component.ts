@@ -22,11 +22,11 @@ export class BillComponent implements OnInit {
   billForm = this.formBuilder.group({
     componentId: [''],
     company: ['', Validators.required],
-    amount: ['', Validators.required],
-    startDate: ['', DateValidator.dateVaidator],
+    amount: ['', [Validators.required, Validators.pattern("^[0-9]+(\.[0-9]{1,2})?$")]],
+    startDate: ['', [Validators.required, DateValidator.dateVaidator]],
     description: ['', Validators.required],
     status: ['', Validators.required],
-    endDate: ['', DateValidator.dateVaidator],
+    endDate: ['', [Validators.required, DateValidator.dateVaidator]],
     reference: ['', Validators.required],
   });
   
@@ -56,6 +56,41 @@ export class BillComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (!this.company.value) {
+      this.errorMessage = 'Please enter a company name';
+      return;
+    }
+
+    if (!this.amount.value) {
+      this.errorMessage = 'Please enter an amount';
+      return;
+    }
+
+    if (!this.startDate.value) {
+      this.errorMessage = 'Please enter a date';
+      return;
+    }
+
+    if (!this.endDate.value) {
+      this.errorMessage = 'Please enter a date';
+      return;
+    }
+
+    if (!this.description.value) {
+      this.errorMessage = 'Please enter a description';
+      return;
+    }
+
+    if (!this.status.value) {
+      this.errorMessage = 'Please enter a status';
+      return;
+    }
+
+    if (!this.reference.value) {
+      this.errorMessage = 'Please enter a reference';
+      return;
+    }
+
     //error checking here
     if(this.componentId.value != 0) {
       // update (need to set id)

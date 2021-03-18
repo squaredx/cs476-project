@@ -14,19 +14,19 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><span>Rootbeer</span></td>
-                <td><span>12</span></td>
-                <td><span>2021-03-01</span></td>
-                <td><span>Need more Rootbeer</span></td>
-                <td><span>Short</span></td>
+            <tr *ngFor="let entity of (listData | async)">
+                <td><span>{{entity.itemName}}</span></td>
+                <td><span>{{entity.number | currency}}</span></td>
+                <td><span>{{entity.startDate.toDate() | date}}</span></td>
+                <td><span>{{entity.description}}</span></td>
+                <td><span>{{entity.status}}</span></td>
                 <td>
-                    <!-- <button class="btn btn-sm btn-warning" (click)="open(content)">
+                    <button class="btn btn-sm btn-warning" (click)="open(content, entity)">
                         <i class="fa fa-edit" style="padding-right: 5px;"></i>Update
                     </button>
-                    <button class="btn btn-sm btn-danger" (click)="openDelete(contentDelete, product)">
+                    <button class="btn btn-sm btn-danger" (click)="delete(entity)">
                         <i class="fa fa-remove" style="padding-right: 5px;"></i>Delete
-                    </button> -->
+                    </button>
                 </td>
             </tr>
         </tbody>
@@ -48,32 +48,63 @@
         <form [formGroup]="productForm" (ngSubmit)="onSubmit()"> 
             <div class="form-group">
                 <label for="item">Product</label>
+                <div *ngIf="item.invalid && (item.dirty || item.touched)" class="text-danger">
+                    <div *ngIf="item.errors.required">
+                      Product name is required
+                    </div>
+                </div>
                 <div class="input-group">
-                    <input id="invoice" class="form-control" formControlName="item">
+                    <input id="invoice" class="form-control" placeholder="Gaming PC" formControlName="item">
                 </div>
             </div>
             <div class="form-group">
                 <label for="number">Amount</label>
+                <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="text-danger">
+                    <div *ngIf="amount.errors.required">
+                      Amount is required
+                    </div>
+                    <div *ngIf="amount.errors.pattern && amount.touched">
+                        Format is invalide
+                    </div>
+                </div>
                 <div class="input-group">
-                    <input id="number" class="form-control" formControlName="number">
+                    <input id="number" class="form-control" placeholder="100" formControlName="number">
                 </div>
             </div>
             <div class="form-group">
                 <label for="date">Date</label>
+                <div *ngIf="startDate.invalid && (startDate.dirty || startDate.touched)" class="text-danger">
+                    <div *ngIf="startDate.errors.required">
+                        Date is required
+                    </div>
+                    <div *ngIf="startDate.errors.dateVaidator">
+                        Date format is invalid
+                    </div>
+                </div>
                 <div class="input-group">
-                    <input id="date" class="form-control" formControlName="date">
+                    <input id="date" class="form-control" placeholder="2021-01-01" formControlName="date">
                 </div>
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
+                <div *ngIf="description.invalid && (description.dirty || description.touched)" class="text-danger">
+                    <div *ngIf="description.errors.required">
+                      Description is required
+                    </div>
+                </div>
                 <div class="input-group">
-                    <input id="description" class="form-control" formControlName="description">
+                    <input id="description" class="form-control" placeholder="Gaming desktop" formControlName="description">
                 </div>
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
+                <div *ngIf="status.invalid && (status.dirty || status.touched)" class="text-danger">
+                    <div *ngIf="status.errors.required">
+                      Status is required
+                    </div>
+                </div>
                 <div class="input-group">
-                    <input id="status" class="form-control" formControlName="status">
+                    <input id="status" class="form-control" placeholder="In stock" formControlName="status">
                 </div>
             </div>
 
