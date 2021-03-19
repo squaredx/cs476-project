@@ -1,11 +1,11 @@
 import firebase from 'firebase/app';
-import { IEntry } from './entry';
+import { IComponent } from './component';
 
 export interface IDashboard {
     lastUpdated: firebase.firestore.Timestamp;
-    latestInventory: IEntry[];
-    latestProduct: IEntry[];
-    upcomingBills: IEntry[];
-    upcomingOrders: IEntry[];
+    latestInventory: IComponent[];
+    latestProduct: IComponent[];
+    upcomingBills: IComponent[];
+    upcomingOrders: IComponent[];
     projectedIncome: number;
 }

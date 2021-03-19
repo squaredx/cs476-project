@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { Router } from '@angular/router';
 import { IUser } from 'src/app/shared/interfaces/user';
 import { FireauthService } from 'src/app/shared/services/fireauth.service';
-import { ConfirmedValidator } from './confirm-password.validator';
+import { ConfirmedValidator } from '../../../shared/validators/confirm-password.validator';
 
 @Component({
   selector: 'app-signup',

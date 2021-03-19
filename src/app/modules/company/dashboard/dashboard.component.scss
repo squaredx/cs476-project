@@ -1,0 +1,60 @@
+
+.header{
+    display: flex;
+    justify-content: center;
+}
+
+h3{
+    font-weight: bold;
+    margin: 20px;
+}
+
+.component{
+    border: 3px solid blue;
+    border-radius: 1ch;
+    width: 400px;
+    height: 150px;
+    background-color: rgb(189, 87, 248);
+    display: inline-block;
+    margin: 20px auto;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.body{
+    width: 100%;
+}
+
+h5{
+    //color: white;
+    color: black;
+    font-weight: 700;
+    margin: 10px;
+    font-size: 20px;
+}
+
+ul{
+    margin-top: 15px;
+    text-align: left;
+}
+
+ul li {
+    list-style: none;
+    font-weight: normal;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+    font-weight: 700;
+    //color: white;
+}
+a:hover{
+    background-color: rgb(116, 209, 240);
+}
+
+.col-style {
+    border: 1px solid rgba(86,61,124,0.2)
+}

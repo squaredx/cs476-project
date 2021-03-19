@@ -1,0 +1,154 @@
+<h3>Order</h3>
+
+<div class="d-flex flex-column text-center">
+    <h3>{{(companyDetails | async)?.companyName}}</h3>
+    <div class="font-weight-light">{{(companyDetails | async)?.companyDesc}}</div>
+</div>
+
+<div style="margin: 30px;">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Total Amount</th>
+                <th>Date</th>
+                <th>Due Date</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let entity of (listData | async)">
+                <td><span>{{entity.reference}}</span></td>
+                <td><span>{{entity.itemName}}</span></td>
+                <td><span>{{entity.number | currency}}</span></td>
+                <td><span>{{entity.startDate.toDate() | date}}</span></td>
+                <td><span>{{entity.endDate.toDate() | date}}</span></td>
+                <td><span>{{entity.description}}</span></td>
+                <td><span>{{entity.status}}</span></td>
+                <td>
+                    <button class="btn btn-sm btn-warning" (click)="open(content, entity)">
+                        <i class="fa fa-edit" style="padding-right: 5px;"></i>Update
+                    </button>
+                    <button class="btn btn-sm btn-danger" (click)="delete(entity)">
+                        <i class="fa fa-remove" style="padding-right: 5px;"></i>Delete
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align: center;">
+    <button (click)="open(content)" style="background-color: rgb(29, 252, 29)" class="btn btn-primary">Add</button>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-titel" id="modal-basic-title" style="margin-left: -2px;">New Record</h4>
+        <button style="padding-left: 100px; padding-top: 28px;" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="reference">Order Number</label>
+                <div *ngIf="reference.invalid && (reference.dirty || reference.touched)" class="text-danger">
+                    <div *ngIf="reference.errors.required">
+                      Invoice number is required
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input id="reference" class="form-control" placeholder="Order#38491" formControlName="reference">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="customer">Customer</label>
+                <div *ngIf="company.invalid && (company.dirty || company.touched)" class="text-danger">
+                    <div *ngIf="company.errors.required">
+                      Company name is required
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input id="customer" class="form-control" placeholder="Slow Pub" formControlName="company">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="value">Total Amount</label>
+                <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="text-danger">
+                    <div *ngIf="amount.errors.required">
+                      Amount is required
+                    </div>
+                    <div *ngIf="amount.errors.pattern && amount.touched">
+                        Numbers only
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input id="value" class="form-control" placeholder="100.00" formControlName="amount">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="date">Order Date</label>
+                <div *ngIf="startDate.invalid && (startDate.dirty || startDate.touched)" class="text-danger">
+                    <div *ngIf="startDate.errors.required">
+                        Date is required
+                    </div>
+                    <div *ngIf="startDate.errors.dateVaidator">
+                        Date format is invalid
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input id="date" class="form-control" placeholder="2021-01-01" formControlName="startDate">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="deadline">Due Date</label>
+                <div *ngIf="endDate.invalid && (endDate.dirty || endDate.touched)" class="text-danger">
+                    <div *ngIf="endDate.errors.required">
+                        Date is required
+                    </div>
+                    <div *ngIf="endDate.errors.dateVaidator">
+                        Date format is invalid
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input id="deadline" class="form-control" placeholder="2021-01-01" formControlName="endDate">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <div *ngIf="description.invalid && (description.dirty || description.touched)" class="text-danger">
+                    <div *ngIf="description.errors.required">
+                      Description is required
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input id="description" class="form-control" placeholder="Liquor Order" formControlName="description">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <div *ngIf="status.invalid && (status.dirty || status.touched)" class="text-danger">
+                    <div *ngIf="status.errors.required">
+                      Status is required
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input id="status" class="form-control" placeholder="Shipped" formControlName="status">
+                </div>
+            </div>
+
+            <div class="border text-center">
+                <button data-dismiss="modal" class="btn btn-info" type="submit" (click)="modal.close('Close click')" [disabled]="!orderForm.valid">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+    </div>
+</ng-template>
