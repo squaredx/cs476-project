@@ -1,5 +1,9 @@
 <h3>Bills</h3>
-<h4>Company name</h4>
+
+<div class="d-flex flex-column text-center">
+    <h3>{{(companyDetails | async)?.companyName}}</h3>
+    <div class="font-weight-light">{{(companyDetails | async)?.companyDesc}}</div>
+</div>
 
 <div style="margin: 30px;">
     <table class="table table-bordered table-striped">

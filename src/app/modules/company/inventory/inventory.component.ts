@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Builder } from '../../../shared/services/component-builder';
 import { FirestoreService } from 'src/app/shared/services/firestore.service';
@@ -8,6 +8,8 @@ import { IComponent } from 'src/app/shared/interfaces/component';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
+import * as moment from 'moment';
+import { ICompany } from 'src/app/shared/interfaces/company';
 
 @Component({
   selector: 'app-inventory',
@@ -17,7 +19,6 @@ import { HotToastService } from '@ngneat/hot-toast';
 export class InventoryComponent implements OnInit {
   errorMessage: string;
   private componentBuilder: Builder;
-  inventory: Builder[];
 
   inventoryForm = this.formBuilder.group({
     componentId: [''],
@@ -33,7 +34,8 @@ export class InventoryComponent implements OnInit {
 
   listData: Observable<IComponent[]>;
   companyId: string;
-  
+  companyDetails: Observable<ICompany>;
+
   constructor(
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
@@ -46,36 +48,44 @@ export class InventoryComponent implements OnInit {
     this.errorMessage = '';
     this.componentBuilder = new Builder();
     this.companyId = this.route.snapshot.paramMap.get('id');
-    this.listData = this.fs.list(this.companyId, 'inventories');
+    this.listData = this.fs.list(this.companyId, 'inventory');
+    // get the company information
+    this.companyDetails = this.fs.getCompanyDetails(this.companyId);
   }
 
   onSubmit(): void {
+    // chec if company set
     if (!this.item.value) {
       this.errorMessage = 'Please enter a product name';
       return;
     }
 
+    // check if amount set
     if (!this.amount.value) {
       this.errorMessage = 'Please enter an amount';
       return;
     }
 
+    // check if startDate set
     if (!this.startDate.value) {
       this.errorMessage = 'Please enter a date';
       return;
     }
 
+    // check if description set
     if (!this.description.value) {
       this.errorMessage = 'Please enter a description';
       return;
     }
 
+    // check if status is set
     if (!this.status.value) {
       this.errorMessage = 'Please enter a status';
       return;
     }
 
-    if(this.componentId.value != 0) {
+    // check if we are updating or creating new record
+    if(this.componentId.value !== 0) {
       // update (need to set id)
       const inventory = this.componentBuilder
                     .setId(this.componentId.value)
@@ -84,8 +94,9 @@ export class InventoryComponent implements OnInit {
                     .setStartDate(this.startDate.value)
                     .setDescription(this.description.value)
                     .setStatus(this.status.value).createComponent();
-      
-      this.fs.update(this.companyId, 'inventories', inventory).then((res) => {
+
+      // update the component using firebase service
+      this.fs.update(this.companyId, 'inventory', inventory).then((res) => {
         this.toast.success('Inventory updated successfully!');
       })
       .catch((err) => {
@@ -100,7 +111,8 @@ export class InventoryComponent implements OnInit {
                     .setStartDate(this.startDate.value)
                     .setDescription(this.description.value)
                     .setStatus(this.status.value).createComponent();
-      this.fs.add(this.companyId, 'inventories', inventory).then((res) => {
+      // update the component using firebase service
+      this.fs.add(this.companyId, 'inventory', inventory).then((res) => {
         this.toast.success('Inventory created successfully!');
       })
       .catch((err) => {
@@ -110,8 +122,8 @@ export class InventoryComponent implements OnInit {
     this.inventoryForm.reset();
   }
 
-  delete(component: IComponent){
-    this.fs.delete(this.companyId, 'inventories', component.id).then((res) => {
+  delete(component: IComponent): any {
+    this.fs.delete(this.companyId, 'inventory', component.id).then((res) => {
       this.toast.success('Inventory deleted successfully!');
     })
     .catch((err) => {
@@ -119,12 +131,12 @@ export class InventoryComponent implements OnInit {
     });
   }
 
-  open(content, component?: IComponent) { 
-    if(component) {
+  open(content, component?: IComponent): any {
+    if (component) {
       console.log(component);
       this.item.setValue(component.itemName);
       this.amount.setValue(component.number);
-      this.startDate.setValue(component.startDate);
+      this.startDate.setValue(moment(component.startDate.toDate()).format('YYYY-MM-DD'));
       this.description.setValue(component.description);
       this.status.setValue(component.status);
       this.componentId.setValue(component.id);
@@ -133,46 +145,46 @@ export class InventoryComponent implements OnInit {
       this.componentId.setValue(0);
     }
 
-    this.modalService.open(content, 
-   {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => { 
-      this.closeResult = `Closed with: ${result}`; 
-    }, (reason) => { 
-      this.closeResult =  
-         `Dismissed ${this.getDismissReason(reason)}`; 
-    }); 
-  } 
-  
-  private getDismissReason(reason: any): string { 
-    if (reason === ModalDismissReasons.ESC) { 
-      return 'by pressing ESC'; 
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) { 
-      return 'by clicking on a backdrop'; 
-    } else { 
-      return `with: ${reason}`; 
-    } 
-  } 
+    this.modalService.open(content,
+   {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult =
+         `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
 
-  get item() {
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  get item(): AbstractControl {
     return this.inventoryForm.controls.item;
   }
 
-  get amount() {
+  get amount(): AbstractControl {
     return this.inventoryForm.controls.amount;
   }
 
-  get startDate() {
+  get startDate(): AbstractControl {
     return this.inventoryForm.controls.startDate;
   }
 
-  get description() {
+  get description(): AbstractControl {
     return this.inventoryForm.controls.description;
   }
 
-  get status() {
+  get status(): AbstractControl {
     return this.inventoryForm.controls.status;
   }
 
-  get componentId() {
+  get componentId(): AbstractControl {
     return this.inventoryForm.controls.componentId;
   }
 }

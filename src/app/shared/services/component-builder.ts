@@ -15,51 +15,47 @@ export class Builder {
     constructor() {
     }
 
-    setId(id: string){
+    setId(id: string): Builder {
         this.id = id;
         return this;
     }
 
-    setReference(reference: string){
+    setReference(reference: string): Builder {
         this.reference = reference;
         return this;
     }
 
-    setItemName(itemName: string){
+    setItemName(itemName: string): Builder {
         this.itemName = itemName;
         return this;
     }
 
-    setNumber(number: number){
-        this.number = number;
+    setNumber(number: number): Builder {
+        this.number = Number(number);
         return this;
     }
 
-    setStartDate(startDate: string){
+    setStartDate(startDate: string): Builder {
         this.startDate = firebase.firestore.Timestamp.fromDate(moment(startDate, 'YYYY-MM-DD', true).toDate());
         return this;
     }
 
-    setEndDate(endDate: string){
+    setEndDate(endDate: string): Builder {
         this.endDate = firebase.firestore.Timestamp.fromDate(moment(endDate, 'YYYY-MM-DD', true).toDate());
         return this;
     }
 
-    setDescription(description: string){
+    setDescription(description: string): Builder {
         this.description = description;
         return this;
     }
 
-    setStatus(status: string){
+    setStatus(status: string): Builder {
         this.status = status;
         return this;
     }
 
-    getId(){
-        return this.id;
-    }
-
-    createComponent() {
+    createComponent(): IComponent {
         const obj = {
             ...(this.id) && {id: this.id},
             reference: this.reference,
@@ -74,13 +70,13 @@ export class Builder {
         return obj;
     }
 
-    reset() {
+    reset(): void {
         this.id = "";
         this.reference = "";
         this.itemName = "";
         this.number = 0;
-        this.startDate = firebase.firestore.Timestamp.now();;
-        this.endDate = firebase.firestore.Timestamp.now();;
+        this.startDate = firebase.firestore.Timestamp.now();
+        this.endDate = firebase.firestore.Timestamp.now();
         this.description = "";
         this.status = "";
     }

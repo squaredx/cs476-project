@@ -1,56 +1,68 @@
 <h3>Dashboard</h3>
 
-<h4>Company name</h4>
+<div class="d-flex flex-column text-center">
+    <h3>{{(companyDetails | async)?.companyName}}</h3>
+    <div class="font-weight-light">{{(companyDetails | async)?.companyDesc}}</div>
+</div>
 
-<!-- {{(data|async)?.lastUpdated.toDate().toDateString()}} -->
-
-
-<div class="container">
+<div class="container mt-5">
     <div class="row">
-        <div class="col-sm col-style">
-            <p><a routerLink="order">Orders coming due</a></p>
-            <ol>
-                <li *ngFor="let order of (data | async)?.upcomingOrders">
-                    <span>{{order.name}}</span>
+        <a routerLink="order" class="col-sm">
+            <h5>Orders Coming Due</h5>
+            <div *ngIf="(data | async)?.upcomingOrders.length===0">
+                <em>No data to show.</em>
+            </div>
+            <ul>
+                <li class="py-2 d-flex flex-column" *ngFor="let order of (data | async)?.upcomingOrders">
+                    <div class="font-weight-bold">[{{order?.reference}}]: {{order?.description}}</div>
+                    <div class="font-italic">Status: {{order?.status}}</div>
                 </li>
-            </ol>
-            <!-- <img src="../../../../assets/images/order.png" style="background-color: white; float: right" width="120px" height="89px"> -->
-        </div>
+            </ul>
+        </a>
 
-        <div class="col-sm col-style">
-            <p><a routerLink="bill">Bills coming due</a></p>
-            <ol>
-                <li *ngFor="let bill of (data | async)?.upcomingBills">
-                    <span>{{bill.name}}</span>
+        <a routerLink="bill" class="col-sm">
+            <h5>Bills Coming Due</h5>
+            <div *ngIf="(data | async)?.upcomingBills.length===0">
+                <em>No data to show.</em>
+            </div>
+            <ul>
+                <li class="py-2 d-flex flex-column" *ngFor="let bill of (data | async)?.upcomingBills">
+                    <div class="font-weight-bold">[{{bill?.reference}}]: {{bill?.itemName}}</div>
+                    <div class="font-italic">Status: {{bill?.status}}</div>
                 </li>
-            </ol>
-            <!-- <img src="../../../../assets/images/bill.png" style="background-color: white; float: right" width="120px" height="89px"> -->
-        </div>
+            </ul>
+        </a>
 
-        <div class="col-sm col-style">
-            <p><a routerLink="inventory">Latest Inventory Added</a></p>
-            <ol>
-                <li *ngFor="let item of (data | async)?.latestInventory">
-                    <span>{{item.name}}</span>
+        <a routerLink="inventory" class="col-sm">
+            <h5>Latest Inventory</h5>
+            <div *ngIf="(data | async)?.latestInventory.length===0">
+                <em>No data to show.</em>
+            </div>
+            <ul>
+                <li class="py-2 d-flex flex-column" *ngFor="let item of (data | async)?.latestInventory">
+                    <div class="font-weight-bold">{{item?.itemName}}</div>
+                    <div class="font-italic">Amount: {{item?.number}}</div>
                 </li>
-            </ol>
-            <!-- <img src="../../../../assets/images/inventory.png" style="background-color: white; float: right" width="120px" height="89px"> -->
-        </div>
+            </ul>
+        </a>
 
-        <div class="col-sm col-style">
-            <p><a routerLink="product">Latest Prodcuts Added</a></p>
-            <ol>
-                <li *ngFor="let order of (data | async)?.latestProducts">
-                    <span>{{order.name}}</span>
+        <a routerLink="product" class="col-sm">
+            <h5>Latest Products</h5>
+            <div *ngIf="(data | async)?.latestProducts.length===0">
+                <em>No data to show.</em>
+            </div>
+            <ul>
+                <li class="py-2 d-flex flex-column" *ngFor="let item of (data | async)?.latestProducts">
+                    <div class="font-weight-bold">{{item?.itemName}}</div>
+                    <div class="font-italic">Status: {{item?.status}}</div>
                 </li>
-            </ol>
-            <!-- <img src="../../../../assets/images/product.jpg" style="background-color: white; float: right" width="120px" height="89px"> -->
-        </div>
+            </ul>
+        </a>
     </div>
-    <div class="row">
-        <div class="col col-style">
+    <div class="row pb-4">
+        <div class="col">
             <h5>Projected revenue over next 7 days</h5>
-            <h4>${{(data | async)?.projectedIncome}}</h4>
+            <h4 class="py-4 text-center">{{(data | async)?.projectedIncome | currency}}</h4>
         </div>
     </div>
     <div class="row">
