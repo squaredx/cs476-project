@@ -5,15 +5,15 @@
     <div class="font-weight-light">{{(companyDetails | async)?.companyDesc}}</div>
 </div>
 
-<div class="container mt-5">
+<div *ngIf="(data | async) as dashboardData" class="container mt-5">
     <div class="row">
         <a routerLink="order" class="col-sm">
             <h5>Orders Coming Due</h5>
-            <div *ngIf="(data | async)?.upcomingOrders.length===0">
+            <div *ngIf="dashboardData.upcomingOrders.length===0">
                 <em>No data to show.</em>
             </div>
             <ul>
-                <li class="py-2 d-flex flex-column" *ngFor="let order of (data | async)?.upcomingOrders">
+                <li class="py-2 d-flex flex-column" *ngFor="let order of dashboardData.upcomingOrders">
                     <div class="font-weight-bold">[{{order?.reference}}]: {{order?.description}}</div>
                     <div class="font-italic">Status: {{order?.status}}</div>
                 </li>
@@ -22,11 +22,11 @@
 
         <a routerLink="bill" class="col-sm">
             <h5>Bills Coming Due</h5>
-            <div *ngIf="(data | async)?.upcomingBills.length===0">
+            <div *ngIf="dashboardData.upcomingBills.length===0">
                 <em>No data to show.</em>
             </div>
             <ul>
-                <li class="py-2 d-flex flex-column" *ngFor="let bill of (data | async)?.upcomingBills">
+                <li class="py-2 d-flex flex-column" *ngFor="let bill of dashboardData.upcomingBills">
                     <div class="font-weight-bold">[{{bill?.reference}}]: {{bill?.itemName}}</div>
                     <div class="font-italic">Status: {{bill?.status}}</div>
                 </li>
@@ -35,11 +35,11 @@
 
         <a routerLink="inventory" class="col-sm">
             <h5>Latest Inventory</h5>
-            <div *ngIf="(data | async)?.latestInventory.length===0">
+            <div *ngIf="dashboardData.latestInventory.length===0">
                 <em>No data to show.</em>
             </div>
             <ul>
-                <li class="py-2 d-flex flex-column" *ngFor="let item of (data | async)?.latestInventory">
+                <li class="py-2 d-flex flex-column" *ngFor="let item of dashboardData.latestInventory">
                     <div class="font-weight-bold">{{item?.itemName}}</div>
                     <div class="font-italic">Amount: {{item?.number}}</div>
                 </li>
@@ -48,11 +48,11 @@
 
         <a routerLink="product" class="col-sm">
             <h5>Latest Products</h5>
-            <div *ngIf="(data | async)?.latestProducts.length===0">
+            <div *ngIf="dashboardData.latestProducts.length===0">
                 <em>No data to show.</em>
             </div>
             <ul>
-                <li class="py-2 d-flex flex-column" *ngFor="let item of (data | async)?.latestProducts">
+                <li class="py-2 d-flex flex-column" *ngFor="let item of dashboardData.latestProducts">
                     <div class="font-weight-bold">{{item?.itemName}}</div>
                     <div class="font-italic">Status: {{item?.status}}</div>
                 </li>
@@ -62,13 +62,12 @@
     <div class="row pb-4">
         <div class="col">
             <h5>Projected revenue over next 7 days</h5>
-            <h4 class="py-4 text-center">{{(data | async)?.projectedIncome | currency}}</h4>
+            <h4 class="py-4 text-center">{{dashboardData.projectedIncome | currency}}</h4>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <em>last fetched: {{(data | async)?.lastUpdated.toDate() | date:'h:mm a, MMM d, y'}}</em>
+            <em>last fetched: {{dashboardData.lastUpdated.toDate() | date:'h:mm a, MMM d, y'}}</em>
         </div>
     </div>
 </div>
-
